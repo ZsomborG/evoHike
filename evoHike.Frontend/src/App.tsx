@@ -16,7 +16,7 @@ function App() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:5204/weatherforecast');
+                const response = await fetch('https://localhost:7275/weatherforecast');
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);

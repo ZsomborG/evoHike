@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:backend": "dotnet run --launch-profile https --project ../evoHike.Backend/evoHike.Backend.csproj",
+    "start:dev": "concurrently -n \"FRONTEND,BACKEND\" \"npm run dev\" \"npm run dev:backend\""
   },
   "dependencies": {
     "react": "^19.1.1",
@@ -19,6 +21,7 @@
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react-swc": "^4.1.0",
+    "concurrently": "^9.2.1",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
