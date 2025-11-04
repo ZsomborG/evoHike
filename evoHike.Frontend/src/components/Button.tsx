@@ -5,7 +5,6 @@ interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
 }
-
 const Button: React.FC<ButtonProps> = ({ children, onClick }) => {
   return (
     <button className="my-button" onClick={onClick}>
@@ -13,5 +12,4 @@ const Button: React.FC<ButtonProps> = ({ children, onClick }) => {
     </button>
   );
 };
-
 export default Button;

@@ -17,33 +17,27 @@ function App() {
     const [error, setError] = useState<string | null>(null);
 
     const handleClick = async () => {
-    setLoading(true);
-    setError(null);
-    setForecasts(null);
+        setLoading(true);
+        setError(null);
+        setForecasts(null);
+        const start = Date.now();
 
-    const start = Date.now();
+        try {
+            const response = await fetch("http://localhost:5204/weatherForecast");
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-    try {
-        const response = await fetch("http://localhost:5204/weatherForecast");
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data: WeatherForecast[] = await response.json();
+            setForecasts(data);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            const elapsed = Date.now() - start;
+            const remaining = Math.max(0, 2000 - elapsed);
+            if (remaining > 0) await new Promise(r => setTimeout(r, remaining));
 
-        const data: WeatherForecast[] = await response.json();
-        setForecasts(data);
-    } catch (err: any) {
-        setError(err.message);
-    } finally {
-        const elapsed = Date.now() - start;
-        const remaining = Math.max(0, 2000 - elapsed);
-        if (remaining > 0) await new Promise(r => setTimeout(r, remaining));
-
-        setLoading(false);
-    }
-};
-
-
-   
-    
-
+            setLoading(false);
+        }
+    };
     return (
         <div className="App">
             <h1>Weather Forecast from C# Backend</h1>
@@ -78,5 +72,4 @@ function App() {
         </div>
     );
 }
-
 export default App;
