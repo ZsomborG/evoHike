@@ -23,7 +23,8 @@ function App() {
         const start = Date.now();
 
         try {
-            const response = await fetch("http://localhost:5204/weatherForecast");
+            const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/weatherforecast`;
+            const response = await fetch(apiUrl);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
             const data: WeatherForecast[] = await response.json();
@@ -44,7 +45,7 @@ function App() {
             <Button onClick={()=>handleClick()}>Click Here</Button>
             {loading && <LoadingSpinner/>}
             {!loading && error && (
-            <ErrorMessage>{error}</ErrorMessage>
+                <ErrorMessage>{error}</ErrorMessage>
             )}
 
             {!loading && forecasts && (
