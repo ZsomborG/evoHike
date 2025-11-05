@@ -1,5 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './App.css';
+import Button from './components/Button'
+import LoadingSpinner from './components/LoadingSpinner';
+import ErrorMessage from './components/ErrorMessage';
 
 type WeatherForecast = {
     date: string;
@@ -10,36 +13,41 @@ type WeatherForecast = {
 
 function App() {
     const [forecasts, setForecasts] = useState<WeatherForecast[] | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('http://localhost:5204/weatherforecast');
+    const handleClick = async () => {
+        setLoading(true);
+        setError(null);
+        setForecasts(null);
+        const start = Date.now();
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+        try {
+            const response = await fetch("http://localhost:5204/weatherForecast");
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-                const data: WeatherForecast[] = await response.json();
-                setForecasts(data);
-            } catch (e: any) {
-                setError(e.message);
-            } finally {
-                setLoading(false);
-            }
-        };
+            const data: WeatherForecast[] = await response.json();
+            setForecasts(data);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            const elapsed = Date.now() - start;
+            const remaining = Math.max(0, 2000 - elapsed);
+            if (remaining > 0) await new Promise(r => setTimeout(r, remaining));
 
-        fetchData();
-    }, []);
-
+            setLoading(false);
+        }
+    };
     return (
         <div className="App">
             <h1>Weather Forecast from C# Backend</h1>
-            {loading && <p>Loading data from API...</p>}
-            {error && <p>Error fetching data: {error}</p>}
-            {forecasts && (
+            <Button onClick={()=>handleClick()}>Click Here</Button>
+            {loading && <LoadingSpinner/>}
+            {!loading && error && (
+            <ErrorMessage>{error}</ErrorMessage>
+            )}
+
+            {!loading && forecasts && (
                 <table>
                     <thead>
                     <tr>
@@ -64,5 +72,4 @@ function App() {
         </div>
     );
 }
-
 export default App;
