@@ -7,28 +7,40 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "check-deps": "check-dependencies --install",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,json}\" --log-level warn",
     "preview": "vite preview",
+    "lint-format": "npm run lint && npm run format",
     "dev:backend": "dotnet run --launch-profile http --project ../evoHike.Backend/evoHike.Backend.csproj",
-    "start:dev": "concurrently -n \"FRONTEND,BACKEND\" \"npm run dev\" \"npm run dev:backend\""
+    "start:dev": "npm run check-deps && npm run lint-format && concurrently -n \"FRONTEND,BACKEND\" \"npm run dev\" \"npm run dev:backend\""
   },
   "dependencies": {
+    "eslint-plugin-react": "^7.37.5",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-spinners":"^0.17.0"
+    "react-spinners": "^0.17.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@types/eslint": "^9.6.1",
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react-swc": "^4.1.0",
+    "check-dependencies": "^2.0.0",
     "concurrently": "^9.2.1",
     "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "prettier": "^3.6.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
     "vite": "^7.1.7"
   }
 }
+
+

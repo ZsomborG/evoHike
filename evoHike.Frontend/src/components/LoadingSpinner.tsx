@@ -1,10 +1,10 @@
-import { HashLoader } from "react-spinners";
-import "../styles/LoadingSpinner.css"
+import { HashLoader } from 'react-spinners';
+import '../styles/LoadingSpinner.css';
 
 const override = {
-  display: "block",
-  margin: "0 auto",
-  borderColor: "red",
+  display: 'block',
+  margin: '0 auto',
+  borderColor: 'red',
 };
 
 function LoadingSpinner() {
@@ -15,8 +15,8 @@ function LoadingSpinner() {
         size={150}
         aria-label="Loading Spinner"
         data-testid="loader"
-        color="#36d7b7" 
-       />
+        color="#36d7b7"
+      />
     </div>
   );
 }
