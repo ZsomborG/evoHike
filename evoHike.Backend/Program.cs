@@ -63,13 +63,11 @@ app.MapGet("/weatherforecast", () =>
         return forecast;
     })
     .WithName("GetWeatherForecast")
-    // EZ A LÉNYEGES RÉSZ:
     .WithOpenApi(operation =>
     {
         operation.Summary = "Visszaad egy 5 napos időjárás-előrejelzést.";
         operation.Description = "Ez csak egy példa végpont, a jövőben valós adatokkal fog visszatérni.";
 
-        // A <returns> komment megfelelője
         if (operation.Responses.TryGetValue("200", out var response))
         {
             response.Description = "Egy lista az előrejelzésekkel.";
