@@ -1,15 +1,9 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import './App.css';
+import type { WeatherForecast } from './types/api';
 import Button from './components/Button'
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
-
-type WeatherForecast = {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
-};
 
 function App() {
     const [forecasts, setForecasts] = useState<WeatherForecast[] | null>(null);
