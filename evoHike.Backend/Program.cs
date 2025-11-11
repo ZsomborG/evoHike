@@ -26,7 +26,11 @@ builder.Services.AddCors(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 var app = builder.Build();
 
@@ -48,7 +52,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
     {
-        var forecast =  Enumerable.Range(1, 5).Select(index =>
+        var forecast = Enumerable.Range(1, 5).Select(index =>
                 new WeatherForecast
                 (
                     DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
@@ -59,7 +63,20 @@ app.MapGet("/weatherforecast", () =>
         return forecast;
     })
     .WithName("GetWeatherForecast")
-    .WithOpenApi();
+    // EZ A LÉNYEGES RÉSZ:
+    .WithOpenApi(operation =>
+    {
+        operation.Summary = "Visszaad egy 5 napos időjárás-előrejelzést.";
+        operation.Description = "Ez csak egy példa végpont, a jövőben valós adatokkal fog visszatérni.";
+
+        // A <returns> komment megfelelője
+        if (operation.Responses.TryGetValue("200", out var response))
+        {
+            response.Description = "Egy lista az előrejelzésekkel.";
+        }
+
+        return operation;
+    });
 
 app.Run();
 
