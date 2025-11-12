@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import './App.css';
+import {useApi} from './hooks/useApi';
 import Button from './components/Button';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
@@ -12,44 +12,15 @@ type WeatherForecast = {
 };
 
 function App() {
-  const [forecasts, setForecasts] = useState<WeatherForecast[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleClick = async () => {
-    setLoading(true);
-    setError(null);
-    setForecasts(null);
-    const start = Date.now();
-
-    try {
-      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/weatherforecast`;
-      const response = await fetch(apiUrl);
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
-
-      const data: WeatherForecast[] = await response.json();
-      setForecasts(data);
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      }
-    } finally {
-      const elapsed = Date.now() - start;
-      const remaining = Math.max(0, 2000 - elapsed);
-      if (remaining > 0) await new Promise((r) => setTimeout(r, remaining));
-
-      setLoading(false);
-    }
-  };
+  const { data:forecasts, loading, error, refetch } = useApi<WeatherForecast[]>('/weatherforecast', { manual: true });
   return (
     <div className="App">
       <h1>Weather Forecast from C# Backend</h1>
-      <Button onClick={() => handleClick()}>Click Here</Button>
+      <Button onClick={refetch}>Click Here</Button>
       {loading && <LoadingSpinner />}
       {!loading && error && <ErrorMessage>{error}</ErrorMessage>}
 
-      {!loading && forecasts && (
+      {!loading && Array.isArray(forecasts) && (
         <table>
           <thead>
             <tr>
@@ -60,12 +31,12 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {forecasts.map((forecast) => (
-              <tr key={forecast.date}>
-                <td>{new Date(forecast.date).toLocaleDateString()}</td>
-                <td>{forecast.temperatureC}</td>
-                <td>{forecast.temperatureF}</td>
-                <td>{forecast.summary}</td>
+            {forecasts.map((forecasts) => (
+              <tr key={forecasts.date}>
+                <td>{new Date(forecasts.date).toLocaleDateString()}</td>
+                <td>{forecasts.temperatureC}</td>
+                <td>{forecasts.temperatureF}</td>
+                <td>{forecasts.summary}</td>
               </tr>
             ))}
           </tbody>
