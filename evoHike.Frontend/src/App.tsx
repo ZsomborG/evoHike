@@ -1,11 +1,17 @@
 import './App.css';
 import type { WeatherForecast } from './types/api';
-import Button from './components/Button'
+import { useApi } from './hooks/useApi';
+import Button from './components/Button';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 
 function App() {
-  const { data:forecasts, loading, error, refetch } = useApi<WeatherForecast[]>('/weatherforecast', { manual: true });
+  const {
+    data: forecasts,
+    loading,
+    error,
+    refetch,
+  } = useApi<WeatherForecast[]>('/api/weatherforecast', { manual: true });
   return (
     <div className="App">
       <h1>Weather Forecast from C# Backend</h1>
