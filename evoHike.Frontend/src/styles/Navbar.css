@@ -13,8 +13,8 @@
   z-index: 50;
 }
 
-.hike {
-  color: var(--primary-color);
+.hike{
+    color: var(--primary-color);
 }
 
 .nav-inner {
@@ -24,12 +24,12 @@
   padding: 0 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; 
 }
 
 .navbar-logo {
-  position: fixed;
-  left: 5em;
+    position: fixed;
+    left: 5em;
 }
 
 .navbar-logo a {
@@ -60,7 +60,7 @@
 }
 
 .navbar-login {
-  margin-left: auto;
+  margin-left: auto; 
 }
 
 .navbar-login a {
@@ -109,14 +109,14 @@
 
 @media (max-width: 800px) {
   .hamburger {
-    display: flex;
+    display: flex; 
   }
 
   .navbar-links {
     position: absolute;
     top: 3rem;
-    right: 0;
-    width: 70%;
+    right: 0; 
+    width: 70%; 
     background-color: darkgreen;
     flex-direction: column;
     display: none;

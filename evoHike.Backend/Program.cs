@@ -1,5 +1,3 @@
-using evoHike.Backend.Services;
-
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +32,6 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
-builder.Services.AddHttpClient<WeatherService>();
 
 var app = builder.Build();
 
