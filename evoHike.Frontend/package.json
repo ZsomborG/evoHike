@@ -16,10 +16,15 @@
     "start:dev": "npm run check-deps && npm run lint-format && concurrently -n \"FRONTEND,BACKEND\" \"npm run dev\" \"npm run dev:backend\""
   },
   "dependencies": {
+    "@types/geojson": "^7946.0.16",
+    "@types/leaflet": "^1.9.21",
     "axios": "^1.13.2",
     "eslint-plugin-react": "^7.37.5",
+    "leaflet": "^1.9.4",
     "react": "^19.1.1",
     "react-dom": "^19.2.0",
+    "react-leaflet": "^5.0.0",
+    "react-leaflet-cluster": "^4.0.0",
     "react-router-dom": "^7.9.5",
     "react-spinners": "^0.17.0"
   },
