@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { AxiosError } from 'axios';
-import apiClient from '../api/axios'; 
+import apiClient from '../api/axios';
 
 interface ApiState<T> {
   data: T | null;
@@ -9,7 +9,7 @@ interface ApiState<T> {
 }
 
 interface UseApiOptions {
-  manual?: boolean; 
+  manual?: boolean;
 }
 
 export function useApi<T>(endpoint: string, options?: UseApiOptions) {
@@ -35,9 +35,17 @@ export function useApi<T>(endpoint: string, options?: UseApiOptions) {
       setState({ data: response.data, loading: false, error: null });
     } catch (err: unknown) {
       if ((err as AxiosError).isAxiosError) {
-        setState({ data: null, loading: false, error: (err as AxiosError).message });
+        setState({
+          data: null,
+          loading: false,
+          error: (err as AxiosError).message,
+        });
       } else {
-        setState({ data: null, loading: false, error: 'An unexpected error occurred' });
+        setState({
+          data: null,
+          loading: false,
+          error: 'An unexpected error occurred',
+        });
       }
     }
   }, [endpoint]);
