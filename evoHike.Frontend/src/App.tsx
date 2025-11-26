@@ -4,6 +4,7 @@ import { useApi } from './hooks/useApi';
 import Button from './components/Button';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
+import { useTranslation } from 'react-i18next';
 
 function App() {
   const {
@@ -12,10 +13,11 @@ function App() {
     error,
     refetch,
   } = useApi<WeatherForecast[]>('/api/weatherforecast', { manual: true });
+  const { t } = useTranslation();
   return (
     <div className="App">
       <h1>Weather Forecast from C# Backend</h1>
-      <Button onClick={refetch}>Click Here</Button>
+      <Button onClick={refetch}>{t('clickHere')}</Button>
       {loading && <LoadingSpinner />}
       {!loading && error && <ErrorMessage>{error}</ErrorMessage>}
 
