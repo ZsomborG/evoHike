@@ -24,8 +24,11 @@ jobs:
           cache: 'npm'
           cache-dependency-path: './evoHike.Frontend/package-lock.json'
 
-      - name: Install Dependencies
+      - name: Install Dependencies (npm ci)
         run: npm ci
+
+      - name: Install Dependencies (npm install)
+        run: npm install
 
       - name: TypeScript Check
         run: npm run type-check
