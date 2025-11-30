@@ -1,9 +1,9 @@
-export interface WeatherForecast {
-  ForecastDatetime: string;
-  WeatherDescription: string;
-  TemperatureC: number;
-  FeelsLikeC: number;
-  WindSpeed_ms: number;
-  HumidityPercent: number;
-  Pop: number;
+export interface OpenWeatherForecast {
+  forecastDatetime: string;
+  //weatherDescription: number;
+  temperatureC: number;
+  feelsLikeC: number;
+  windSpeed_ms: number;
+  humidityPercent: number;
+  pop: number;
 }

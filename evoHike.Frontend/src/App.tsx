@@ -1,9 +1,11 @@
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
 import type { WeatherForecast } from './types/api';
 import { useApi } from './hooks/useApi';
 import Button from './components/Button';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
+import Weather from './Weather';
 
 function App() {
   const {
@@ -12,36 +14,57 @@ function App() {
     error,
     refetch,
   } = useApi<WeatherForecast[]>('/api/weatherforecast', { manual: true });
+
   return (
     <div className="App">
-      <h1>Weather Forecast from C# Backend</h1>
-      <Button onClick={refetch}>Click Here</Button>
-      {loading && <LoadingSpinner />}
-      {!loading && error && <ErrorMessage>{error}</ErrorMessage>}
+      <Routes>
+        {/* Főoldal - itt jelenik meg a WeatherForecast API eredménye */}
+        <Route
+          path="/"
+          element={
+            <>
+              <h1>Weather Forecast from C# Backend</h1>
+              <Button onClick={refetch}>Click Here</Button>
+              {loading && <LoadingSpinner />}
+              {!loading && error && <ErrorMessage>{error}</ErrorMessage>}
 
-      {!loading && Array.isArray(forecasts) && (
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Temp. (C)</th>
-              <th>Temp. (F)</th>
-              <th>Summary</th>
-            </tr>
-          </thead>
-          <tbody>
-            {forecasts.map((forecasts) => (
-              <tr key={forecasts.date}>
-                <td>{new Date(forecasts.date).toLocaleDateString()}</td>
-                <td>{forecasts.temperatureC}</td>
-                <td>{forecasts.temperatureF}</td>
-                <td>{forecasts.summary}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+              {!loading && Array.isArray(forecasts) && (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Temp. (C)</th>
+                      <th>Temp. (F)</th>
+                      <th>Summary</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {forecasts.map((forecast) => (
+                      <tr key={forecast.date}>
+                        <td>{new Date(forecast.date).toLocaleDateString()}</td>
+                        <td>{forecast.temperatureC}</td>
+                        <td>{forecast.temperatureF}</td>
+                        <td>{forecast.summary}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </>
+          }
+        />
+
+        {/* Weather útvonal - csak a Weather komponens jelenik meg */}
+        <Route path="/weather" element={<Weather />} />
+
+        {/* További útvonalak */}
+        <Route path="/routeplan" element={<div>Tervezés oldal</div>} />
+        <Route path="/journal" element={<div>Túranapló oldal</div>} />
+        <Route path="/social" element={<div>Közösség oldal</div>} />
+        <Route path="/contact" element={<div>Kapcsolat oldal</div>} />
+      </Routes>
     </div>
   );
 }
+
 export default App;

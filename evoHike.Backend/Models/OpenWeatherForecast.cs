@@ -28,6 +28,7 @@ public class CurrentWeather
     public double[]? HourlyWindSpeed { get; set; }
     [JsonPropertyName("precipitation_probability")]
     public double[]? HourlyPrecipitation { get; set; }
+
  }
 
 public class OpenWeatherForecast

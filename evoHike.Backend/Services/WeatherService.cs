@@ -14,7 +14,7 @@ public class WeatherService
     public async Task<List<OpenWeatherForecast>> GetWeatherForecastAsync()
     {
     
-        string url = "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,precipitation_probability&current=temperature_2m&forecast_days=1";
+        string url = "https://api.open-meteo.com/v1/forecast?latitude=48.1031&longitude=20.7781&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,precipitation_probability,weather_code&forecast_days=1";
 
         var response = await _httpClient.GetFromJsonAsync<OpenWeatherForecastDto>(url);
         
@@ -35,7 +35,7 @@ public class WeatherService
                         FeelsLikeC = response.hourly.HourlyApparentTemperature![i],
                         WindSpeed_ms = (int)response.hourly.HourlyWindSpeed![i],
                         HumidityPercent = response.hourly.HourlyRelativeHumidity![i],
-                        Pop = response.hourly.HourlyPrecipitation![i]
+                        Pop = response.hourly.HourlyPrecipitation![i],
                     };
                     
                     forecast.Add(weatherItem);
