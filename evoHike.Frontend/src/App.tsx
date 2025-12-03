@@ -18,7 +18,6 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        {/* Főoldal - itt jelenik meg a WeatherForecast API eredménye */}
         <Route
           path="/"
           element={
@@ -53,11 +52,7 @@ function App() {
             </>
           }
         />
-
-        {/* Weather útvonal - csak a Weather komponens jelenik meg */}
         <Route path="/weather" element={<Weather />} />
-
-        {/* További útvonalak */}
         <Route path="/routeplan" element={<div>Tervezés oldal</div>} />
         <Route path="/journal" element={<div>Túranapló oldal</div>} />
         <Route path="/social" element={<div>Közösség oldal</div>} />
