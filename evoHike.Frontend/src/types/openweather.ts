@@ -1,6 +1,6 @@
 export interface OpenWeatherForecast {
   forecastDatetime: string;
-  //weatherDescription: number;
+  weatherCode: number;
   temperatureC: number;
   feelsLikeC: number;
   windSpeed_ms: number;

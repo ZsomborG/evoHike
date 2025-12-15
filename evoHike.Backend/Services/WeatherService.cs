@@ -36,6 +36,7 @@ public class WeatherService
                         WindSpeed_ms = (int)response.hourly.HourlyWindSpeed![i],
                         HumidityPercent = response.hourly.HourlyRelativeHumidity![i],
                         Pop = response.hourly.HourlyPrecipitation![i],
+                        WeatherCode = (int)response.hourly.HourlyWeatherCode![i]
                     };
                     
                     forecast.Add(weatherItem);
