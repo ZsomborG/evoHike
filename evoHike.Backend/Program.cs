@@ -62,12 +62,6 @@ app.UseCors(myAllowSpecificOrigins);
 
 app.MapControllers();
 
-app.MapGet("/trails", (EvoHikeContext db) =>
-db.Trails.ToList()
-)
-.WithName("GetTrails")
-.WithOpenApi();
-
 app.Run();
 
 public static class Configs
