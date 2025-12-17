@@ -12,11 +12,12 @@ import {
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { divIcon, point } from 'leaflet';
+import { useTranslation } from 'react-i18next';
 
 interface Cluster {
   getChildCount: () => number;
 }
-const geojson=routeData as FeatureCollection;
+const geojson = routeData as FeatureCollection;
 
 // custom cluster icon
 const createClusterCustomIcon = (cluster: Cluster) => {
@@ -26,7 +27,9 @@ const createClusterCustomIcon = (cluster: Cluster) => {
     iconSize: point(33, 33, true),
   });
 };
-{/* Beégetett koordináta adatok */}
+{
+  /* Beégetett koordináta adatok */
+}
 const routeCoordinates: [number, number][] = [
   [37.7749, -122.4194], // San Francisco
   [36.7783, -119.4179], // California center
@@ -34,17 +37,20 @@ const routeCoordinates: [number, number][] = [
 ];
 
 export default function App() {
+  const { t } = useTranslation();
   return (
     <div className="route-page-wrapper">
-      <h1 style={{ textAlign: 'center' }}>Útvonaltervezés</h1>
+      <h1 style={{ textAlign: 'center' }}>{t('routePageH1')}</h1>
       <MapContainer className="map" center={[48.1007, 20.7897]} zoom={13}>
         {/* OPEN STREEN MAPS TILES */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Polyline positions={routeCoordinates} />   {/* Beégetett koordináta adatok megjelenitése */}
-        <GeoJSON data={geojson} />   {/* Fájlból koordináta adatok beolvásasa és megjelenitése */}
+        <Polyline positions={routeCoordinates} />{' '}
+        {/* Beégetett koordináta adatok megjelenitése */}
+        <GeoJSON data={geojson} />{' '}
+        {/* Fájlból koordináta adatok beolvásasa és megjelenitése */}
         <MarkerClusterGroup
           chunkedLoading
           iconCreateFunction={createClusterCustomIcon}>
