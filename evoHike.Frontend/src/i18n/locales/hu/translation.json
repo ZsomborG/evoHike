@@ -1,5 +1,13 @@
 {
   "social": "Közösség",
   "weather": "Időjárás",
-  "clickHere": "Kapcsolj ide"
+  "clickHere": "Kapcsolj ide",
+  "mainMenuH1": "Időjárás előrejelzés C# Backend felől",
+  "routePageH1": "Útvonaltervezés",
+  "navbarLink1": "Tervezés",
+  "navbarLink2": "Időjárás",
+  "navbarLink3": "Túranapló",
+  "navbarLink4": "Közösség",
+  "navbarLink5": "Kapcsolat",
+  "navbarLink6": "Bejelentkezés"
 }

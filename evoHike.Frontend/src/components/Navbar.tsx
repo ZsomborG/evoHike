@@ -1,10 +1,12 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import '../styles/Navbar.css';
+import '../styles/Navbar.css';
+import { useTranslation } from 'react-i18next';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
-
+  const { t } = useTranslation();
   return (
     <nav className="navbar-container">
       <div className="nav-inner">
@@ -22,27 +24,27 @@ function Navbar() {
         </button>
         <ul className={`navbar-links ${open ? 'open' : ''}`}>
           <li>
-            <NavLink to="/">Kezdőlap</NavLink>
+            <NavLink to="/routeplan">{t('navbarLink1')}</NavLink>
           </li>
           <li>
-            <NavLink to="/routeplan">Tervezés</NavLink>
+            <NavLink to="/weather">{t('navbarLink2')}</NavLink>
           </li>
           <li>
-            <NavLink to="/weather">Időjárás</NavLink>
+            <NavLink to="/journal">{t('navbarLink3')}</NavLink>
           </li>
           <li>
-            <NavLink to="/journal">Túranapló</NavLink>
+            <NavLink to="/social">{t('navbarLink4')}</NavLink>
           </li>
           <li>
-            <NavLink to="/social">Közösség</NavLink>
-          </li>
-          <li>
-            <NavLink to="/contact">Kapcsolat</NavLink>
+            <NavLink to="/contact">{t('navbarLink5')}</NavLink>
           </li>
         </ul>
         <div className="navbar-login">
-          <NavLink to="/login" id="login">
-            Bejelentkezés
+          <NavLink
+            to="/login"
+            id="login"
+            className={({ isActive }) => (isActive ? 'active' : '')}>
+            {t('navbarLink6')}
           </NavLink>
         </div>
       </div>
