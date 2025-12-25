@@ -108,7 +108,7 @@
   transform: rotate(-45deg) translate(0.45em, -0.35em);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1030px) {
   .hamburger {
     display: flex;
   }
@@ -116,7 +116,7 @@
   .navbar-links {
     z-index: 2000;
     position: absolute;
-    top: 3rem;
+    top: 4rem;
     right: 0;
     width: 70%;
     background-color: darkgreen;
