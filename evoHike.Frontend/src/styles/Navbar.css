@@ -28,8 +28,7 @@
 }
 
 .navbar-logo {
-  position: fixed;
-  left: 5em;
+  flex-shrink: 0;
 }
 
 .navbar-logo a {
@@ -108,7 +107,7 @@
   transform: rotate(-45deg) translate(0.45em, -0.35em);
 }
 
-@media (max-width: 1030px) {
+@media (max-width: 1200px) {
   .hamburger {
     display: flex;
   }

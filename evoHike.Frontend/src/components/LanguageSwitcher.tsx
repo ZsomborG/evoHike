@@ -1,36 +1,31 @@
-import { useTranslation } from 'react-i18next';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import '../styles/LanguageSwitcher.css';
-import huFlag from '../assets/flag-for-flag-hungary-svgrepo-com.svg';
-import ukFlag from '../assets/flag-for-flag-united-kingdom-svgrepo-com.svg';
-
-type Language = 'hu' | 'en';
+import { useLanguage } from '../hooks/useLanguage';
 
 function LanguageSwitcher() {
-  const { i18n } = useTranslation();
+  const { options, currentOption, changeLanguage } = useLanguage();
   const [open, setOpen] = useState<boolean>(false);
   const switcherRef = useRef<HTMLDivElement>(null);
 
-  const changeLang = (lang: Language) => {
-    i18n.changeLanguage(lang);
-    setOpen(false);
-  };
-
-  const currentFlag = i18n.language === 'hu' ? huFlag : ukFlag;
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (
+      switcherRef.current &&
+      !switcherRef.current.contains(event.target as Node)
+    ) {
+      setOpen(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        switcherRef.current &&
-        !switcherRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
+    if (!open) {
+      return;
+    }
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [open, handleClickOutside]);
 
   return (
     <div className="switcher" ref={switcherRef}>
@@ -39,17 +34,25 @@ function LanguageSwitcher() {
         onClick={() => setOpen((prev) => !prev)}
         aria-expanded={open}
         aria-haspopup="menu">
-        <img src={currentFlag} alt="Current language" />
+        <img src={currentOption.flagSource} alt="Current language" />
       </button>
 
       {open && (
         <div className="dropdown-content">
-          <button onClick={() => changeLang('hu')}>
-            <img src={huFlag} alt="Hungarian" /> HU
-          </button>
-          <button onClick={() => changeLang('en')}>
-            <img src={ukFlag} alt="English" /> UK
-          </button>
+          {options.map((option) => {
+            const isActive = option.code === currentOption.code;
+
+            return (
+              <button
+                key={option.code}
+                onClick={() => changeLanguage(option.code)}
+                disabled={isActive}
+                className={`lang-option ${isActive ? 'active' : ''}`}>
+                <img src={option.flagSource} alt={option.label} />
+                <span>{option.short}</span>
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

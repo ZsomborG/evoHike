@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import '../styles/Navbar.css';
 import '../styles/Navbar.css';
 import { useTranslation } from 'react-i18next';
@@ -10,19 +10,25 @@ function Navbar() {
   const { t } = useTranslation();
   const navbarRef = useRef<HTMLDivElement>(null);
 
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (
+      navbarRef.current &&
+      !navbarRef.current.contains(event.target as Node)
+    ) {
+      setOpen(false);
+    }
+  }, []);
+
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        navbarRef.current &&
-        !navbarRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
+    if (!open) {
+      return;
+    }
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [open, handleClickOutside]);
 
   return (
     <nav className="navbar-container">
