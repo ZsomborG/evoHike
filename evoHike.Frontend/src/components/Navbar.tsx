@@ -1,15 +1,38 @@
 import { Link, NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import '../styles/Navbar.css';
 import '../styles/Navbar.css';
 import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
+  const navbarRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (
+      navbarRef.current &&
+      !navbarRef.current.contains(event.target as Node)
+    ) {
+      setOpen(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [open, handleClickOutside]);
+
   return (
     <nav className="navbar-container">
-      <div className="nav-inner">
+      <div className="nav-inner" ref={navbarRef}>
         <div className="navbar-logo">
           <Link to="/">
             evo<span className="hike">Hike</span>
@@ -47,6 +70,7 @@ function Navbar() {
             {t('navbarLink6')}
           </NavLink>
         </div>
+        <LanguageSwitcher />
       </div>
     </nav>
   );
