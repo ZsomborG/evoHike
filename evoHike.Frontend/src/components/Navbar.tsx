@@ -1,13 +1,38 @@
 import { Link, NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import '../styles/Navbar.css';
+import '../styles/Navbar.css';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
+  const navbarRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (
+      navbarRef.current &&
+      !navbarRef.current.contains(event.target as Node)
+    ) {
+      setOpen(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [open, handleClickOutside]);
 
   return (
     <nav className="navbar-container">
-      <div className="nav-inner">
+      <div className="nav-inner" ref={navbarRef}>
         <div className="navbar-logo">
           <Link to="/">
             evo<span className="hike">Hike</span>
@@ -22,29 +47,30 @@ function Navbar() {
         </button>
         <ul className={`navbar-links ${open ? 'open' : ''}`}>
           <li>
-            <NavLink to="/">Kezdőlap</NavLink>
+            <NavLink to="/routeplan">{t('navbarLink1')}</NavLink>
           </li>
           <li>
-            <NavLink to="/routeplan">Tervezés</NavLink>
+            <NavLink to="/weather">{t('navbarLink2')}</NavLink>
           </li>
           <li>
-            <NavLink to="/weather">Időjárás</NavLink>
+            <NavLink to="/journal">{t('navbarLink3')}</NavLink>
           </li>
           <li>
-            <NavLink to="/journal">Túranapló</NavLink>
+            <NavLink to="/social">{t('navbarLink4')}</NavLink>
           </li>
           <li>
-            <NavLink to="/social">Közösség</NavLink>
-          </li>
-          <li>
-            <NavLink to="/contact">Kapcsolat</NavLink>
+            <NavLink to="/contact">{t('navbarLink5')}</NavLink>
           </li>
         </ul>
         <div className="navbar-login">
-          <NavLink to="/login" id="login">
-            Bejelentkezés
+          <NavLink
+            to="/login"
+            id="login"
+            className={({ isActive }) => (isActive ? 'active' : '')}>
+            {t('navbarLink6')}
           </NavLink>
         </div>
+        <LanguageSwitcher />
       </div>
     </nav>
   );

@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+cd evoHike.Frontend
+npx lint-staged --relative

@@ -23,4 +23,3 @@ public class OpenWeatherForecastController : ControllerBase
         return await _weatherService.GetWeatherForecastAsync();
     }
 }
-

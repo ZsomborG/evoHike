@@ -1,0 +1,13 @@
+{
+  "social": "Social",
+  "weather": "Weather",
+  "clickHere": "Click here",
+  "mainMenuH1": "Weather Forecast from C# Backend",
+  "routePageH1": "Routing planning",
+  "navbarLink1": "Planner",
+  "navbarLink2": "Weather",
+  "navbarLink3": "Journal",
+  "navbarLink4": "Social",
+  "navbarLink5": "Contacts",
+  "navbarLink6": "Login"
+}
