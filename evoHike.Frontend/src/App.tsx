@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/HomePage';
 import RoutePage from './pages/RoutePage';
-import Weather from './Weather';
+import Weather from './pages/Weather';
 
 function App() {
   return (

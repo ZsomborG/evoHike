@@ -1,6 +1,6 @@
 import './App.css';
 
-import { useOpenWeather } from './hooks/useOpenWeather';
+import { useOpenWeather } from '../hooks/useOpenWeather';
 
 const getWeatherDescription = (code: number): string => {
   const descriptions: Record<number, string> = {
