@@ -10,7 +10,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 50;
+  z-index: 9999;
 }
 
 .hike {
@@ -28,8 +28,7 @@
 }
 
 .navbar-logo {
-  position: fixed;
-  left: 5em;
+  flex-shrink: 0;
 }
 
 .navbar-logo a {
@@ -40,6 +39,7 @@
 }
 
 .navbar-links {
+  margin-left: 2rem;
   align-items: center;
   justify-content: center;
   list-style: none;
@@ -107,14 +107,15 @@
   transform: rotate(-45deg) translate(0.45em, -0.35em);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1200px) {
   .hamburger {
     display: flex;
   }
 
   .navbar-links {
+    z-index: 2000;
     position: absolute;
-    top: 3rem;
+    top: 4rem;
     right: 0;
     width: 70%;
     background-color: darkgreen;
