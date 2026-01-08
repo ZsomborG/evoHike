@@ -6,7 +6,6 @@ public static class DbInitializer
 {
     public static void Initialize(EvoHikeContext context)
     {
-        context.Database.EnsureCreated();
 
         if (context.Trails.Any())
         {
@@ -15,8 +14,26 @@ public static class DbInitializer
 
         var trails = new Trail[]
         {
-            new Trail { Name = "Bükkinyúlsz", Location = "Bükk", Length = 30, Difficulty = DifficultyLevel.Medium, Elevation = 2 },
-            new Trail { Name = "Bükkihűlsz", Location = "Bükk", Length = 20, Difficulty = DifficultyLevel.Hard, Elevation = 10 }
+            new Trail
+            {
+                Name = "Bükkinyúlsz",
+                ShortDescription = "Kellemes séta a Bükkben.",
+                Length = 30, 
+                ElevationGain = 200,
+                EstimatedDuration = 120,
+                CoverPhotoPath = "nincs",
+                PointsOfInterests = "{}"
+            },
+            new Trail
+            {
+                Name = "Bükkihűlsz",
+                ShortDescription = "Nehéz terep, csak profiknak.",
+                Length = 20, 
+                ElevationGain = 1000,
+                EstimatedDuration = 300,
+                CoverPhotoPath = "nincs",
+                PointsOfInterests = "{}"
+            }
         };
 
         context.Trails.AddRange(trails);
