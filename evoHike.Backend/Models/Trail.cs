@@ -1,26 +1,33 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace evoHike.Backend.Models
 {
-
-    public enum DifficultyLevel
-    {
-        Easy,
-        Medium,
-        Hard,
-        Expert
-    }
-
+    [Table("Routes")]
     public class Trail
     {
-        public int Id { get; set; }
+        [Key]
+        public Guid Id { get; set; }
 
+        [MaxLength(150)]
         public required string Name { get; set; }
 
-        public required string Location { get; set; }
+        [MaxLength(500)]
+        public string? ShortDescription { get; set; }
+
+        public string? RoutePlan { get; set; }
+
+        [MaxLength(500)]
+        public string? CoverPhotoPath { get; set; }
 
         public double Length { get; set; }
 
-        public DifficultyLevel Difficulty { get; set; }
+        public int EstimatedDuration { get; set; }
 
-        public double Elevation { get; set; }
+        public int ElevationGain { get; set; }
+
+        public string? PointsOfInterests { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
