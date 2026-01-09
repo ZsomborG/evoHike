@@ -13,6 +13,10 @@ import {
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { divIcon, point } from 'leaflet';
 import { useTranslation } from 'react-i18next';
+import TrailCard from '../components/TrailCard';
+import { Trail } from '../models/Trail';
+import trailData from '../data/mockTrails.json';
+import type { DifficultyLevel } from '../types/difficulty';
 
 interface Cluster {
   getChildCount: () => number;
@@ -36,8 +40,16 @@ const routeCoordinates: [number, number][] = [
   [34.0522, -118.2437], // Los Angeles
 ];
 
-export default function App() {
+function RoutePage() {
   const { t } = useTranslation();
+  const mockTrails = trailData.map(
+    (t) =>
+      new Trail({
+        ...t,
+        difficulty: t.difficulty as DifficultyLevel,
+      }),
+  );
+
   return (
     <div className="route-page-wrapper">
       <h1 style={{ textAlign: 'center' }}>{t('routePageH1')}</h1>
@@ -66,6 +78,12 @@ export default function App() {
           </Marker>
         </MarkerClusterGroup>
       </MapContainer>
+      <div className="trail-container">
+        {mockTrails.map((trail) => (
+          <TrailCard key={trail.id} trail={trail} />
+        ))}
+      </div>
     </div>
   );
 }
+export default RoutePage;

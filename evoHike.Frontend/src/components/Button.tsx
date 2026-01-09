@@ -5,11 +5,11 @@ interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
 }
-const Button: React.FC<ButtonProps> = ({ children, onClick }) => {
+function Button({ children, onClick }: ButtonProps) {
   return (
     <button className="my-button" onClick={onClick}>
       {children}
     </button>
   );
-};
+}
 export default Button;

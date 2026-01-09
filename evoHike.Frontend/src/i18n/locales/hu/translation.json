@@ -9,5 +9,18 @@
   "navbarLink3": "Túranapló",
   "navbarLink4": "Közösség",
   "navbarLink5": "Kapcsolat",
-  "navbarLink6": "Bejelentkezés"
+  "navbarLink6": "Bejelentkezés",
+  "trail": {
+    "difficulty_label": "Túra nehézség",
+    "distance": "Távolság",
+    "elevation": "Emelkedés",
+    "rating": "Értékelés",
+    "button_text": "Tervezőbe",
+    "difficulties": {
+      "0": "Könnyű",
+      "1": "Közepes",
+      "2": "Nehéz",
+      "3": "Extrém"
+    }
+  }
 }
