@@ -13,6 +13,8 @@ import {
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { divIcon, point } from 'leaflet';
 import { useTranslation } from 'react-i18next';
+import TrailCard from '../components/TrailCard';
+import type { Trail } from '../types/Trail';
 
 interface Cluster {
   getChildCount: () => number;
@@ -38,6 +40,77 @@ const routeCoordinates: [number, number][] = [
 
 export default function App() {
   const { t } = useTranslation();
+  const mockTrails: Trail[] = [
+    {
+      id: '1',
+      name: 'Bükk - Bükkinyúlsz',
+      location: 'Bükk',
+      length: 4300,
+      difficulty: 0,
+      coverPhotoPath: '',
+      elevationGain: 431,
+      rating: 4.2,
+      reviewCount: 7,
+    },
+    {
+      id: '2',
+      name: 'Kékes Csúcs-túra',
+      location: 'Mátra',
+      length: 12500,
+      difficulty: 2,
+      coverPhotoPath: '',
+      elevationGain: 850,
+      rating: 4.8,
+      reviewCount: 24,
+    },
+    {
+      id: '3',
+      name: 'Nagymaros - Prédikálószék',
+      location: 'Dunakanyar',
+      length: 9200,
+      difficulty: 1,
+      coverPhotoPath: '',
+      elevationGain: 560,
+      rating: 4.5,
+      reviewCount: 15,
+    },
+    {
+      id: '4',
+      name: 'Rám-szakadék kaland',
+      location: 'Pilis',
+      length: 7100,
+      difficulty: 2,
+      coverPhotoPath: '',
+      elevationGain: 320,
+      rating: 4.9,
+      reviewCount: 42,
+    },
+    {
+      id: '5',
+      name: 'Spartacus-ösvény',
+      location: 'Visegrádi-hegység',
+      length: 14000,
+      difficulty: 1,
+      coverPhotoPath:
+        'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400&h=250&fit=crop',
+      elevationGain: 410,
+      rating: 4,
+      reviewCount: 11,
+    },
+    {
+      id: '6',
+      name: 'Vörös-kő extrém kör',
+      location: 'Bükk',
+      length: 18500,
+      difficulty: 3,
+      coverPhotoPath:
+        'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=250&fit=crop',
+      elevationGain: 1150,
+      rating: 4.7,
+      reviewCount: 5,
+    },
+  ];
+
   return (
     <div className="route-page-wrapper">
       <h1 style={{ textAlign: 'center' }}>{t('routePageH1')}</h1>
@@ -66,6 +139,11 @@ export default function App() {
           </Marker>
         </MarkerClusterGroup>
       </MapContainer>
+      <div className="trail-container">
+        {mockTrails.map((trail) => (
+          <TrailCard key={trail.id} trail={trail} />
+        ))}
+      </div>
     </div>
   );
 }

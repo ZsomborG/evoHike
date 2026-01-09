@@ -9,5 +9,18 @@
   "navbarLink3": "Journal",
   "navbarLink4": "Social",
   "navbarLink5": "Contacts",
-  "navbarLink6": "Login"
+  "navbarLink6": "Login",
+  "trail": {
+    "difficulty_label": "Difficulty",
+    "distance": "Distance",
+    "elevation": "Elevation",
+    "rating": "Rating",
+    "button_text": "To Planner",
+    "difficulties": {
+      "0": "Easy",
+      "1": "Medium",
+      "2": "Hard",
+      "3": "Extreme"
+    }
+  }
 }
