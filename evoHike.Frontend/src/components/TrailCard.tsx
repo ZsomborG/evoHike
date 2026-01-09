@@ -1,13 +1,12 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import '../styles/TrailCard.css';
-import type { Trail } from '../types/Trail';
+import { Trail } from '../models/Trail';
 
 interface TrailCardProps {
   trail: Trail;
 }
 
-const TrailCard: React.FC<TrailCardProps> = ({ trail }) => {
+function TrailCard({ trail }: TrailCardProps) {
   const { t } = useTranslation();
 
   return (
@@ -17,7 +16,7 @@ const TrailCard: React.FC<TrailCardProps> = ({ trail }) => {
       <div className="trail-card-header">
         <div className="trail-card-title-section">
           <div className="trail-card-icon-circle">
-            <span style={{ fontSize: '20px', color: 'white' }}>🚶</span>
+            <span className="trail-card-hiking-icon">🚶</span>
           </div>
           <div>
             <h2 className="trail-card-title">{trail.name}</h2>
@@ -37,9 +36,7 @@ const TrailCard: React.FC<TrailCardProps> = ({ trail }) => {
         <div className="trail-card-stats-section">
           <div>
             <div className="trail-card-stat-label">{t('trail.distance')}</div>
-            <p className="trail-card-stat-value">
-              {trail.length.toLocaleString()}m
-            </p>
+            <p className="trail-card-stat-value">{trail.length}m</p>
           </div>
 
           <div>
@@ -54,7 +51,7 @@ const TrailCard: React.FC<TrailCardProps> = ({ trail }) => {
                 {trail.reviewCount ?? 0}
               </span>
               <div className="trail-card-vertical-line"></div>
-              <span style={{ color: '#FFD700' }}>⭐</span>
+              <span className="trail-card-rating-star">⭐</span>
               <span className="trail-card-stat-value">
                 {trail.rating ?? 0.0}
               </span>
@@ -71,7 +68,7 @@ const TrailCard: React.FC<TrailCardProps> = ({ trail }) => {
                 className="trail-card-cover-image"
               />
             ) : (
-              <span style={{ fontSize: '30px' }}>🖼️</span>
+              <span className="trail-card-placeholder-image">🖼️</span>
             )}
           </div>
           <button type="button" className="trail-card-action-btn">
@@ -81,6 +78,6 @@ const TrailCard: React.FC<TrailCardProps> = ({ trail }) => {
       </div>
     </div>
   );
-};
+}
 
 export default TrailCard;

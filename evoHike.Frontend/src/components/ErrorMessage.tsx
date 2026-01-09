@@ -4,7 +4,7 @@ import '../styles/ErrorMessage.css';
 interface ErrorMessageProps {
   children: React.ReactNode;
 }
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ children }) => {
+function ErrorMessage({ children }: ErrorMessageProps) {
   return <div className="error-message">{children}</div>;
-};
+}
 export default ErrorMessage;

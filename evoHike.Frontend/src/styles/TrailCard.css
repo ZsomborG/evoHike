@@ -77,6 +77,19 @@
   padding-bottom: 5px;
 }
 
+.trail-card-hiking-icon {
+  font-size: 20px;
+  color: white;
+}
+
+.trail-card-rating-star {
+  color: #ffd700;
+}
+
+.trail-card-placeholder-image {
+  font-size: 30px;
+}
+
 .trail-card-stat-label {
   color: #777;
   font-size: 14px;
