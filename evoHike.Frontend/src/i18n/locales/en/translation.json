@@ -19,7 +19,6 @@
   "weatherVapor": "Vapor",
   "weatherPrecipitation": "Precipitation",
   "weatherDescription": "Description",
-
   "weatherCodes": {
     "0": "Clear sky",
     "1": "Mainly clear",
@@ -49,5 +48,18 @@
     "95": "Thunderstorm",
     "96": "Thunderstorm with slight hail",
     "99": "Thunderstorm with heavy hail"
+  },
+  "trail": {
+    "difficulty_label": "Difficulty",
+    "distance": "Distance",
+    "elevation": "Elevation",
+    "rating": "Rating",
+    "button_text": "To Planner",
+    "difficulties": {
+      "0": "Easy",
+      "1": "Medium",
+      "2": "Hard",
+      "3": "Extreme"
+    }
   }
 }

@@ -19,7 +19,6 @@
   "weatherVapor": "Pára",
   "weatherPrecipitation": "Csapadék",
   "weatherDescription": "Leírás",
-
   "weatherCodes": {
     "0": "Tiszta égbolt",
     "1": "Főként tiszta",
@@ -49,5 +48,18 @@
     "95": "Zivatar",
     "96": "Zivatar jégesővel (gyenge)",
     "99": "Zivatar jégesővel (erős)"
+  },
+  "trail": {
+    "difficulty_label": "Túra nehézség",
+    "distance": "Távolság",
+    "elevation": "Emelkedés",
+    "rating": "Értékelés",
+    "button_text": "Tervezőbe",
+    "difficulties": {
+      "0": "Könnyű",
+      "1": "Közepes",
+      "2": "Nehéz",
+      "3": "Extrém"
+    }
   }
 }

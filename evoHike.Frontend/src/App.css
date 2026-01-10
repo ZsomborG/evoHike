@@ -5,6 +5,10 @@
   padding: 0;
   text-align: left; /* Prevent leaflet from centering elements */
 }
+html {
+  /* Fixálja a scrollbar-t igy nem ugrál össze-vissza a navbar oldalváltáskor*/
+  scrollbar-gutter: stable;
+}
 
 .App {
   text-align: center;
