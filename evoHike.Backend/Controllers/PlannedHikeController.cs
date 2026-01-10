@@ -1,52 +1,65 @@
-﻿using evoHike.Backend.Data;
-using evoHike.Backend.Models;
+﻿using evoHike.Backend.Models;
+using evoHike.Backend.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace evoHike.Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PlannedHikesController(EvoHikeContext _context) : ControllerBase
+    public class PlannedHikesController(IPlannedHikeService _plannedHikeService) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PlannedHike>>> GetPlannedHikes()
+        public async Task<ActionResult<IEnumerable<PlannedHikeEntity>>> GetPlannedHikes()
         {
-            return await _context.PlannedHikes
-                .Include(ph => ph.Route)
-                .OrderBy(ph => ph.PlannedStartDateTime)
-                .ToListAsync();
+            try
+            {
+                var hikes = await _plannedHikeService.GetAllPlannedHikesAsync();
+                return Ok(hikes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<PlannedHike>> PlanHike(PlannedHike plannedHike)
+        public async Task<ActionResult<PlannedHikeEntity>> PlanHike(PlannedHikeEntity plannedHike)
         {
-            if (plannedHike.RouteId == Guid.Empty)
+            try
             {
-                return BadRequest("RouteId is required.");
+                if (plannedHike.RouteId == 0)
+                {
+                    return BadRequest("RouteId is required.");
+                }
+
+                var createdHike = await _plannedHikeService.CreatePlannedHikeAsync(plannedHike);
+
+                return CreatedAtAction(nameof(GetPlannedHikes), new { id = createdHike.Id }, createdHike);
             }
-
-            plannedHike.Status = HikeStatus.Planned;
-            _context.PlannedHikes.Add(plannedHike);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetPlannedHikes), new { id = plannedHike.Id }, plannedHike);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}/complete")]
-        public async Task<IActionResult> MarkAsCompleted(Guid id)
+        public async Task<IActionResult> MarkAsCompleted(int id)
         {
-            var hike = await _context.PlannedHikes.FindAsync(id);
-            if (hike == null)
+            try
             {
-                return NotFound();
+                var isSuccess = await _plannedHikeService.MarkHikeAsCompletedAsync(id);
+
+                if (!isSuccess)
+                {
+                    return NotFound();
+                }
+
+                return NoContent();
             }
-
-            hike.Status = HikeStatus.Completed;
-            hike.CompletedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

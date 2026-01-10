@@ -6,7 +6,7 @@ namespace evoHike.Backend.Services
 {
     public class TrailService(EvoHikeContext _context) : ITrailService
     {
-        public async Task<IEnumerable<Trail>> GetAllTrailsAsync()
+        public async Task<IEnumerable<RouteEntity>> GetAllTrailsAsync()
         {
             var trails = await _context.Trails
                 .AsNoTracking()
@@ -20,7 +20,7 @@ namespace evoHike.Backend.Services
             return trails;
         }
 
-        public async Task<Trail?> GetTrailByIdAsync(Guid id)
+        public async Task<RouteEntity?> GetTrailByIdAsync(int id)
         {
             return await _context.Trails
                 .AsNoTracking()

@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace evoHike.Backend.Models
 {
     [Table("Routes")]
-    public class Trail
+    public class RouteEntity
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [MaxLength(150)]
         public required string Name { get; set; }

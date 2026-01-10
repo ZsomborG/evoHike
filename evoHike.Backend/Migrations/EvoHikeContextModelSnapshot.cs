@@ -22,12 +22,13 @@ namespace evoHike.Backend.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("evoHike.Backend.Models.PlannedHike", b =>
+            modelBuilder.Entity("evoHike.Backend.Models.PlannedHikeEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("CompletedAt")
                         .HasColumnType("datetime2");
@@ -41,8 +42,8 @@ namespace evoHike.Backend.Migrations
                     b.Property<DateTime>("PlannedStartDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("RouteId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("RouteId")
+                        .HasColumnType("int");
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
@@ -54,12 +55,13 @@ namespace evoHike.Backend.Migrations
                     b.ToTable("PlannedHikes");
                 });
 
-            modelBuilder.Entity("evoHike.Backend.Models.Trail", b =>
+            modelBuilder.Entity("evoHike.Backend.Models.RouteEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CoverPhotoPath")
                         .HasMaxLength(500)
@@ -97,9 +99,9 @@ namespace evoHike.Backend.Migrations
                     b.ToTable("Routes");
                 });
 
-            modelBuilder.Entity("evoHike.Backend.Models.PlannedHike", b =>
+            modelBuilder.Entity("evoHike.Backend.Models.PlannedHikeEntity", b =>
                 {
-                    b.HasOne("evoHike.Backend.Models.Trail", "Route")
+                    b.HasOne("evoHike.Backend.Models.RouteEntity", "Route")
                         .WithMany()
                         .HasForeignKey("RouteId")
                         .OnDelete(DeleteBehavior.Cascade)

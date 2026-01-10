@@ -4,15 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace evoHike.Backend.Models
 {
     [Table("PlannedHikes")]
-    public class PlannedHike
+    public class PlannedHikeEntity
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [ForeignKey(nameof(Route))]
-        public Guid RouteId { get; set; }
+        public int RouteId { get; set; }
 
-        public Trail? Route { get; set; }
+        public RouteEntity? Route { get; set; }
 
         public DateTime PlannedStartDateTime { get; set; }
 
