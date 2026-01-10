@@ -6,6 +6,10 @@ public class OpenWeatherForecastDto
     public CurrentWeather? current { get; set; }
 
     public HourlyWeather? hourly { get; set; }
+    public bool IsValid()
+    {
+        return hourly?.IsValidForecast() ?? false;
+    }
 }
 
 public class CurrentWeather
@@ -30,6 +34,39 @@ public class CurrentWeather
     public double[]? HourlyPrecipitation { get; set; }
     [JsonPropertyName("weather_code")]
     public int[]? HourlyWeatherCode { get; set; }
+    
+    public bool IsValidForecast()
+    {
+        if (HourlyDateTime == null || HourlyTemperature == null || HourlyRelativeHumidity == null ||
+            HourlyApparentTemperature == null || HourlyWindSpeed == null || HourlyPrecipitation == null ||
+            HourlyWeatherCode == null)
+        {
+            return false;
+        }
+
+        int length = HourlyDateTime.Length;
+        return HourlyTemperature.Length == length &&
+               HourlyRelativeHumidity.Length == length &&
+               HourlyApparentTemperature.Length == length &&
+               HourlyWindSpeed.Length == length &&
+               HourlyPrecipitation.Length == length &&
+               HourlyWeatherCode.Length == length &&
+               length > 0;
+    }
+    
+    public OpenWeatherForecast ToWeatherForecast(int index, DateTime forecastTime)
+    {
+        return new OpenWeatherForecast
+        {
+            ForecastDatetime = forecastTime,
+            TemperatureC = HourlyTemperature![index],
+            FeelsLikeC = HourlyApparentTemperature![index],
+            WindSpeed_ms = (int)HourlyWindSpeed![index],
+            HumidityPercent = HourlyRelativeHumidity![index],
+            Pop = HourlyPrecipitation![index],
+            WeatherCode = (int)HourlyWeatherCode![index]
+        };
+    }
 
  }
 

@@ -1,44 +1,17 @@
 import '../App.css';
 
 import { useOpenWeather } from '../hooks/useOpenWeather';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 
-const getWeatherDescription = (code: number): string => {
-  const descriptions: Record<number, string> = {
-    0: 'Tiszta égbolt',
-    1: 'Főként tiszta',
-    2: 'Részben felhős',
-    3: 'Borult',
-    45: 'Köd',
-    48: 'Zúzmarás köd',
-    51: 'Szitálás: Könnyű',
-    53: 'Szitálás: Mérsékelt',
-    55: 'Szitálás: Sűrű',
-    56: 'Ónos szitálás: Könnyű',
-    57: 'Ónos szitálás: Sűrű',
-    61: 'Eső: Gyenge',
-    63: 'Eső: Mérsékelt',
-    65: 'Eső: Erős',
-    66: 'Ónos eső: Könnyű',
-    67: 'Ónos eső: Erős',
-    71: 'Havazás: Gyenge',
-    73: 'Havazás: Mérsékelt',
-    75: 'Havazás: Erős',
-    77: 'Hódara',
-    80: 'Zápor: Gyenge',
-    81: 'Zápor: Mérsékelt',
-    82: 'Zápor: Heves',
-    85: 'Hózápor: Gyenge',
-    86: 'Hózápor: Erős',
-    95: 'Zivatar',
-    96: 'Zivatar jégesővel (gyenge)',
-    99: 'Zivatar jégesővel (erős)',
-  };
-
-  return descriptions[code] || 'Ismeretlen';
+const getWeatherDescription = (code: number, t: TFunction): string => {
+  const val = t(`weatherCodes.${code}`, { defaultValue: 'Ismeretlen' });
+  return typeof val === 'string' ? val : 'Ismeretlen';
 };
 
 function Weather() {
   const { data: forecasts, loading, error, refetch } = useOpenWeather();
+  const { t } = useTranslation();
 
   if (loading)
     return <div className="container-style">Időjárás adatok betöltése...</div>;
@@ -52,10 +25,10 @@ function Weather() {
   return (
     <div className="weather-container">
       <div className="weather-header">
-        <h2>Időjárás előrejelzés</h2>
+        <h2>{t('weatherForecast')}</h2>
 
         <button className="my-button" onClick={refetch}>
-          Frissítés
+          {t('refresh')}
         </button>
       </div>
 
@@ -63,19 +36,19 @@ function Weather() {
         <table className="weather-table">
           <thead>
             <tr>
-              <th>Időpont</th>
+              <th>{t('weatherTime')}</th>
 
-              <th>Hőm.</th>
+              <th>{t('weatherTemperature')}</th>
 
-              <th>Hőérzet</th>
+              <th>{t('weatherFeelsLike')}</th>
 
-              <th>Szél</th>
+              <th>{t('weatherWind')}</th>
 
-              <th>Pára</th>
+              <th>{t('weatherVapor')}</th>
 
-              <th>Csapadék</th>
+              <th>{t('weatherPrecipitation')}</th>
 
-              <th>Leírás</th>
+              <th>{t('weatherDescription')}</th>
             </tr>
           </thead>
 
@@ -126,7 +99,7 @@ function Weather() {
 
                 <td className="description-cell">
                   {item.weatherCode !== undefined
-                    ? getWeatherDescription(item.weatherCode)
+                    ? getWeatherDescription(item.weatherCode, t)
                     : '-'}
                 </td>
               </tr>

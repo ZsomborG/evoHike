@@ -21,29 +21,22 @@ public class WeatherService
         var forecast = new List<OpenWeatherForecast>();
         var now = DateTime.Now; 
 
-        if (response?.hourly != null && response.hourly.HourlyDateTime != null)
+        if (response == null || !response.IsValid())
         {
-            for (int i = 0; i < response.hourly.HourlyDateTime.Length; i++)
+            return new List<OpenWeatherForecast>();
+        }
+        {
+            var hourlyData = response.hourly!;
+
+            for (int i = 0; i < hourlyData.HourlyDateTime!.Length; i++)
             {
-                DateTime apiTime = DateTime.Parse(response.hourly.HourlyDateTime[i]);
+                DateTime apiTime = DateTime.Parse(hourlyData.HourlyDateTime[i]);
                 if (apiTime >= now)
                 {
-                    var weatherItem = new OpenWeatherForecast
-                    {
-                        ForecastDatetime = apiTime,
-                        TemperatureC = response.hourly.HourlyTemperature![i],
-                        FeelsLikeC = response.hourly.HourlyApparentTemperature![i],
-                        WindSpeed_ms = (int)response.hourly.HourlyWindSpeed![i],
-                        HumidityPercent = response.hourly.HourlyRelativeHumidity![i],
-                        Pop = response.hourly.HourlyPrecipitation![i],
-                        WeatherCode = (int)response.hourly.HourlyWeatherCode![i]
-                    };
-                    
-                    forecast.Add(weatherItem);
+                    forecast.Add(hourlyData.ToWeatherForecast(i, apiTime));
                 }
             }
         }
-            
         return forecast;
     }
 }
