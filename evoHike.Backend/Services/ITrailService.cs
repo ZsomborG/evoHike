@@ -4,6 +4,7 @@ namespace evoHike.Backend.Services
 {
     public interface ITrailService
     {
-        Task<IEnumerable<Trail>> GetAllTrailsAsync();
+        Task<IEnumerable<RouteEntity>> GetAllTrailsAsync();
+        Task<RouteEntity?> GetTrailByIdAsync(int id);
     }
 }

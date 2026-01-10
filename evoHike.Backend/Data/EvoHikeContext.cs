@@ -1,6 +1,5 @@
 ﻿using evoHike.Backend.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace evoHike.Backend.Data
 {
@@ -10,6 +9,7 @@ namespace evoHike.Backend.Data
         {
         }
 
-        public DbSet<Trail> Trails { get; set; }
+        public DbSet<RouteEntity> Trails { get; set; }
+        public DbSet<PlannedHikeEntity> PlannedHikes { get; set; }
     }
 }
