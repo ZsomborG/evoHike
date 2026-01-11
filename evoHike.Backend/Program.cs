@@ -1,9 +1,11 @@
 using evoHike.Backend;
 using evoHike.Backend.Data;
+using evoHike.Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddApplicationCors(builder.Configuration);
 builder.Services.AddApplicationSwagger();
 builder.Services.AddApplicationDatabase(builder.Configuration);

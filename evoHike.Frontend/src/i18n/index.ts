@@ -6,19 +6,19 @@ import en from './locales/en/translation.json';
 import hu from './locales/hu/translation.json';
 
 const resources = {
-    en: { translation: en },
-    hu: { translation: hu },
+  en: { translation: en },
+  hu: { translation: hu },
 } as const;
 
 i18n
-    .use(LanguageDetector)
-    .use(initReactI18next)
-    .init({
-        resources,
-        fallbackLng: 'en',
-        interpolation: {
-            escapeValue: false,
-        },
-    });
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false,
+    },
+  });
 
 export default i18n;
