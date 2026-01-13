@@ -3,6 +3,10 @@
   margin: 0;
   padding: 0;
 }
+.page-header {
+  margin-top: 5rem;
+  text-align: center;
+}
 
 .route-page-wrapper {
   width: 100%;
@@ -10,7 +14,7 @@
   margin: 0 auto;
 }
 
-.map {
+.map-container {
   height: 600px;
   width: 100%;
   margin-top: 2rem;
@@ -30,6 +34,12 @@
   box-shadow: 0 0 0px 5px #fff;
 }
 
+.page-layout {
+  display: grid;
+  grid-template-columns: 4fr 6fr;
+  background-color: var(---primary-bg-color);
+}
+
 .trail-container {
   display: grid;
   /* Automatikus oszlopkiosztás: minimum 320px, maximum amennyi kifér */
@@ -38,4 +48,12 @@
   padding: 1.5rem;
   max-width: 1300px;
   margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .page-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 2rem;
+  }
 }
