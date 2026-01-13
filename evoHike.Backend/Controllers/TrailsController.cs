@@ -9,7 +9,7 @@ namespace evoHike.Backend.Controllers
     public class TrailsController(ITrailService _trailService) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Trail>>> GetTrails()
+        public async Task<ActionResult<IEnumerable<RouteEntity>>> GetTrails()
         {
             try
             {
