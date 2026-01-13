@@ -61,5 +61,19 @@
       "2": "Nehéz",
       "3": "Extrém"
     }
+  },
+  "routeForm": {
+    "route_name": "Útvonal neve",
+    "add_photo": "Fotó hozzáadása",
+    "upload_file": "Útvonal fájl (.gpx)",
+    "trail_description": "Túra rövid leírása...",
+    "poi": {
+      "poi": "Nevezetességek",
+      "name": "Név",
+      "description": "Leírás",
+      "new": "+ Új hozzáadása"
+    },
+    "save": "Mentés",
+    "cancel": "Vissza"
   }
 }

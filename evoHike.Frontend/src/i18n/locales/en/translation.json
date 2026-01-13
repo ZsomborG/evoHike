@@ -61,5 +61,19 @@
       "2": "Hard",
       "3": "Extreme"
     }
+  },
+  "routeForm": {
+    "route_name": "Trail name",
+    "add_photo": "Add photo",
+    "upload_file": "Trail file (.gpx)",
+    "trail_description": "Short description...",
+    "poi": {
+      "poi": "Point of Interests",
+      "name": "Name",
+      "description": "Description",
+      "new": "+ Add new"
+    },
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }

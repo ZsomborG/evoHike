@@ -17,7 +17,7 @@ import TrailCard from '../components/TrailCard';
 import { Trail } from '../models/Trail';
 import trailData from '../data/mockTrails.json';
 import type { DifficultyLevel } from '../types/difficulty';
-import DynamicInputs from '../components/DynamicInputs';
+import RouteForm from '../components/RouteForm';
 
 interface Cluster {
   getChildCount: () => number;
@@ -56,7 +56,7 @@ function RoutePage() {
       <h1 className="page-header">{t('routePageH1')}</h1>
       <div className="page-layout">
         <div className="form-container">
-          <DynamicInputs />
+          <RouteForm />
         </div>
         <MapContainer
           className="map-container"

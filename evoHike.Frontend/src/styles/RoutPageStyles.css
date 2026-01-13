@@ -15,9 +15,8 @@
 }
 
 .map-container {
-  height: 600px;
+  height: 650px;
   width: 100%;
-  margin-top: 2rem;
   display: block;
 }
 
@@ -35,6 +34,8 @@
 }
 
 .page-layout {
+  margin-top: 2rem;
+  width: 100%;
   display: grid;
   grid-template-columns: 4fr 6fr;
   background-color: var(---primary-bg-color);
