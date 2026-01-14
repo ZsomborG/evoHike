@@ -21,6 +21,7 @@ import {
   GiWaterfall,
 } from 'react-icons/gi';
 import type { OverpassElement } from '../api/overpassApi';
+import '../styles/RoutPageStyles.css';
 
 interface Cluster {
   getChildCount: () => number;
@@ -38,16 +39,7 @@ export const createClusterCustomIcon = (cluster: Cluster) => {
 // segédfüggvény a react ikonok leaflet diviconná alakításához
 const createReactIcon = (icon: React.ReactElement, color: string) => {
   const iconHtml = renderToStaticMarkup(
-    <div
-      style={{
-        color: color,
-        fontSize: '40px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100%',
-      }}>
+    <div className="custom-react-icon-container" style={{ color: color }}>
       {icon}
     </div>,
   );
