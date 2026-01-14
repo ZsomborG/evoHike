@@ -41,6 +41,7 @@ import MapNavigationControls from '../components/MapNavigationControls';
 import RouteEditorPanel from '../components/RouteEditorPanel';
 import { MdDelete } from 'react-icons/md';
 import RouteForm from '../components/RouteForm';
+import TrailListPanel from '../components/TrailListPanel';
 
 const geojson = routeData as FeatureCollection;
 
@@ -121,6 +122,9 @@ function RoutePage() {
 
   // ref a navigációs állapot követésére
   const isNavigationActiveRef = useRef(false);
+
+  // ref a térkép konténerhez a görgetéshez
+  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     isNavigationActiveRef.current = !!(
@@ -317,7 +321,13 @@ function RoutePage() {
         }
 
         // felgörgetés a térképhez
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (mapContainerRef.current) {
+          const yCoordinate =
+            mapContainerRef.current.getBoundingClientRect().top +
+            window.scrollY;
+          const yOffset = -100; // navbar magassága + kis ráhagyás
+          window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
+        }
       }
     },
     [map, handleRouteSelect],
@@ -352,152 +362,178 @@ function RoutePage() {
   return (
     <div className="route-page-wrapper">
       <h1 className="route-page-title">{t('routePageH1')}</h1>
+      <div className="form-container">
+        <RouteForm />
+      </div>
 
-      {/* ha választunk a kurzor legyen célkereszt */}
-      <div
-        className={`map-container-wrapper ${selectionMode ? 'selection-mode-active' : ''}`}>
-          <div className="form-container">
-              <RouteForm />
+      <div className="map-section-container">
+        {/* útvonal szerkesztő panel - bal oldalon */}
+        {navStart || navEnd ? (
+          <div className="map-sidebar">
+            <RouteEditorPanel
+              name={customRouteName}
+              description={customRouteDesc}
+              distance={customRouteStats.distance}
+              time={customRouteStats.time}
+              onNameChange={setCustomRouteName}
+              onDescriptionChange={setCustomRouteDesc}
+              onSave={() => alert(`Útvonal mentve: ${customRouteName}`)}
+            />
           </div>
-        <MapContainer
-          className="map"
-          center={[48.1007, 20.7897]}
-          zoom={13}
-          ref={setMap}>
-          {/* eseményfigyelő a klikkekhez */}
-          <MapEvents
-            onContextMenu={handleContextMenu}
-            onMapClick={handleMapClick}
+        ) : (
+          <div className="map-sidebar">
+            <TrailListPanel onSelectTrail={handleTrailCardSelect} />
+          </div>
+        )}
+
+        {/* ha választunk a kurzor legyen célkereszt */}
+        <div
+          ref={mapContainerRef}
+          className={`map-container-wrapper ${selectionMode ? 'selection-mode-active' : ''}`}
+          style={{ flexGrow: 1 }}>
+          <MapContainer
+            className="map"
+            center={[48.1007, 20.7897]}
+            zoom={13}
+            ref={setMap}>
+            {/* eseményfigyelő a klikkekhez */}
+            <MapEvents
+              onContextMenu={handleContextMenu}
+              onMapClick={handleMapClick}
+            />
+
+            {/* open street maps csempék */}
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+
+            {/* keresési sáv megjelenítése */}
+            {searchPath && (
+              <RouteRadiusVisualizer path={searchPath} radius={200} />
+            )}
+
+            {/* útvonaltervező megjelenítése */}
+            {navStart && navEnd && (
+              <RoutingMachine
+                waypoints={waypoints}
+                onRouteFound={handleRouteFound}
+              />
+            )}
+
+            {/* köztes pontok megjelenítése */}
+            {navIntermediates.map((pos, idx) => (
+              <Marker
+                key={`waypoint-${idx}`}
+                position={pos}
+                icon={waypointIcon}>
+                <Popup>
+                  <div className="popup-content-wrapper">
+                    <strong>Köztes pont {idx + 1}</strong>
+                    <br />
+                    <button
+                      onClick={() => handleRemoveWaypoint(idx)}
+                      className="popup-delete-btn">
+                      <MdDelete style={{ marginRight: '4px' }} /> Törlés
+                    </button>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
+
+            {/* start pont megjelenítése */}
+            {navStart && (
+              <Marker position={navStart} icon={startIcon}>
+                <Popup>
+                  <div className="popup-content-wrapper">
+                    <strong>Start pont</strong>
+                    <br />
+                    <button
+                      onClick={handleRemoveStart}
+                      className="popup-delete-btn">
+                      <MdDelete style={{ marginRight: '4px' }} /> Törlés
+                    </button>
+                  </div>
+                </Popup>
+              </Marker>
+            )}
+
+            {/* célpont megjelenítése */}
+            {navEnd && (
+              <Marker position={navEnd} icon={endIcon}>
+                <Popup>
+                  <div className="popup-content-wrapper">
+                    <strong>Cél pont</strong>
+                    <br />
+                    <button
+                      onClick={handleRemoveEnd}
+                      className="popup-delete-btn">
+                      <MdDelete style={{ marginRight: '4px' }} /> Törlés
+                    </button>
+                  </div>
+                </Popup>
+              </Marker>
+            )}
+
+            {/* vizuális réteg */}
+            {filteredGeoJson && (
+              <GeoJSON
+                key={`visual-${selectedTrail?.id}`} // a key miatt újrarajzolja ha változik az id
+                data={filteredGeoJson}
+                style={visualLayerStyle}
+              />
+            )}
+
+            {/* interakciós réteg */}
+            {filteredGeoJson && (
+              <GeoJSON
+                key={`interaction-${selectedTrail?.id}`} // ide is kell a key
+                data={filteredGeoJson}
+                onEachFeature={onEachFeature}
+                style={interactionLayerStyle}
+              />
+            )}
+
+            <MarkerClusterGroup
+              chunkedLoading
+              iconCreateFunction={createClusterCustomIcon}>
+              {pois.length > 0 &&
+                pois.map((poi) => (
+                  <Marker
+                    key={poi.id}
+                    position={[poi.lat, poi.lon]}
+                    icon={getIconForPoi(poi)}>
+                    <Popup>{poi.tags?.name}</Popup>
+                  </Marker>
+                ))}
+            </MarkerClusterGroup>
+          </MapContainer>
+          <MapLegend />
+
+          {/* jobb oldali navigációs panel */}
+          <MapNavigationControls
+            onSelectStartMode={() => {
+              setSelectionMode('start');
+              setSelectedTrail(null);
+              setPois([]);
+              setSearchPath(null);
+            }}
+            onSelectEndMode={() => {
+              setSelectionMode('end');
+              setSelectedTrail(null);
+              setPois([]);
+              setSearchPath(null);
+            }}
+            onSelectWaypointMode={() => {
+              setSelectionMode('waypoint');
+              setSelectedTrail(null);
+              setPois([]);
+              setSearchPath(null);
+            }}
+            onClear={handleClearNav}
+            selectionMode={selectionMode}
           />
-
-          {/* open street maps csempék */}
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-
-          {/* keresési sáv megjelenítése */}
-          {searchPath && (
-            <RouteRadiusVisualizer path={searchPath} radius={200} />
-          )}
-
-          {/* útvonaltervező megjelenítése */}
-          {navStart && navEnd && (
-            <RoutingMachine
-              waypoints={waypoints}
-              onRouteFound={handleRouteFound}
-            />
-          )}
-
-          {/* köztes pontok megjelenítése */}
-          {navIntermediates.map((pos, idx) => (
-            <Marker key={`waypoint-${idx}`} position={pos} icon={waypointIcon}>
-              <Popup>
-                <div className="popup-content-wrapper">
-                  <strong>Köztes pont {idx + 1}</strong>
-                  <br />
-                  <button
-                    onClick={() => handleRemoveWaypoint(idx)}
-                    className="popup-delete-btn">
-                    <MdDelete style={{ marginRight: '4px' }} /> Törlés
-                  </button>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
-
-          {/* start pont megjelenítése */}
-          {navStart && (
-            <Marker position={navStart} icon={startIcon}>
-              <Popup>
-                <div className="popup-content-wrapper">
-                  <strong>Start pont</strong>
-                  <br />
-                  <button
-                    onClick={handleRemoveStart}
-                    className="popup-delete-btn">
-                    <MdDelete style={{ marginRight: '4px' }} /> Törlés
-                  </button>
-                </div>
-              </Popup>
-            </Marker>
-          )}
-
-          {/* célpont megjelenítése */}
-          {navEnd && (
-            <Marker position={navEnd} icon={endIcon}>
-              <Popup>
-                <div className="popup-content-wrapper">
-                  <strong>Cél pont</strong>
-                  <br />
-                  <button
-                    onClick={handleRemoveEnd}
-                    className="popup-delete-btn">
-                    <MdDelete style={{ marginRight: '4px' }} /> Törlés
-                  </button>
-                </div>
-              </Popup>
-            </Marker>
-          )}
-
-          {/* vizuális réteg */}
-          {filteredGeoJson && (
-            <GeoJSON
-              key={`visual-${selectedTrail?.id}`} // a key miatt újrarajzolja ha változik az id
-              data={filteredGeoJson}
-              style={visualLayerStyle}
-            />
-          )}
-
-          {/* interakciós réteg */}
-          {filteredGeoJson && (
-            <GeoJSON
-              key={`interaction-${selectedTrail?.id}`} // ide is kell a key
-              data={filteredGeoJson}
-              onEachFeature={onEachFeature}
-              style={interactionLayerStyle}
-            />
-          )}
-
-          <MarkerClusterGroup
-            chunkedLoading
-            iconCreateFunction={createClusterCustomIcon}>
-            {pois.length > 0 &&
-              pois.map((poi) => (
-                <Marker
-                  key={poi.id}
-                  position={[poi.lat, poi.lon]}
-                  icon={getIconForPoi(poi)}>
-                  <Popup>{poi.tags?.name}</Popup>
-                </Marker>
-              ))}
-          </MarkerClusterGroup>
-        </MapContainer>
-        <MapLegend />
-
-        {/* jobb oldali navigációs panel */}
-        <MapNavigationControls
-          onSelectStartMode={() => {
-            setSelectionMode('start');
-            setSelectedTrail(null);
-            setPois([]);
-            setSearchPath(null);
-          }}
-          onSelectEndMode={() => {
-            setSelectionMode('end');
-            setSelectedTrail(null);
-            setPois([]);
-            setSearchPath(null);
-          }}
-          onSelectWaypointMode={() => {
-            setSelectionMode('waypoint');
-            setSelectedTrail(null);
-            setPois([]);
-            setSearchPath(null);
-          }}
-          onClear={handleClearNav}
-          selectionMode={selectionMode}
-        />
+        </div>
       </div>
 
       {/* saját jobb klikk menü */}
@@ -509,19 +545,6 @@ function RoutePage() {
           onNavTo={handleNavTo}
           onAddWaypoint={handleAddWaypoint}
           onClearNav={handleClearNav}
-        />
-      )}
-
-      {/* útvonal szerkesztő panel */}
-      {(navStart || navEnd) && (
-        <RouteEditorPanel
-          name={customRouteName}
-          description={customRouteDesc}
-          distance={customRouteStats.distance}
-          time={customRouteStats.time}
-          onNameChange={setCustomRouteName}
-          onDescriptionChange={setCustomRouteDesc}
-          onSave={() => alert(`Útvonal mentve: ${customRouteName}`)}
         />
       )}
 
