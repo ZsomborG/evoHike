@@ -330,6 +330,25 @@ function RoutePage() {
     return navStart && navEnd ? [navStart, ...navIntermediates, navEnd] : [];
   }, [navStart, navEnd, navIntermediates]);
 
+  // szűrt geojson adat a kiválasztott túra alapján
+  const filteredGeoJson = useMemo(() => {
+    if (!selectedTrail) return null;
+
+    const feature = geojson.features.find(
+      (f) => f.properties?.id === selectedTrail.id,
+    );
+
+    // ha megtaláltuk a vonalat becsomagoljuk egy szabványos geojson objektumba
+    if (feature) {
+      const collection: FeatureCollection = {
+        type: 'FeatureCollection',
+        features: [feature],
+      };
+      return collection;
+    }
+    return null;
+  }, [selectedTrail]);
+
   return (
     <div className="route-page-wrapper">
       <h1 className="route-page-title">{t('routePageH1')}</h1>
@@ -422,14 +441,23 @@ function RoutePage() {
           )}
 
           {/* vizuális réteg */}
-          <GeoJSON data={geojson} style={visualLayerStyle} />
+          {filteredGeoJson && (
+            <GeoJSON
+              key={`visual-${selectedTrail?.id}`} // a key miatt újrarajzolja ha változik az id
+              data={filteredGeoJson}
+              style={visualLayerStyle}
+            />
+          )}
 
           {/* interakciós réteg */}
-          <GeoJSON
-            data={geojson}
-            onEachFeature={onEachFeature}
-            style={interactionLayerStyle}
-          />
+          {filteredGeoJson && (
+            <GeoJSON
+              key={`interaction-${selectedTrail?.id}`} // ide is kell a key
+              data={filteredGeoJson}
+              onEachFeature={onEachFeature}
+              style={interactionLayerStyle}
+            />
+          )}
 
           <MarkerClusterGroup
             chunkedLoading
