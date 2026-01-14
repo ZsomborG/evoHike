@@ -4,13 +4,18 @@ import { Trail } from '../models/Trail';
 
 interface TrailCardProps {
   trail: Trail;
+  onPlan: (trail: Trail) => void;
+  onHover: (trailId: string | null) => void;
 }
 
-function TrailCard({ trail }: TrailCardProps) {
+function TrailCard({ trail, onPlan, onHover }: TrailCardProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="trail-card-container">
+    <div
+      className="trail-card-container"
+      onMouseEnter={() => onHover(trail.id)}
+      onMouseLeave={() => onHover(null)}>
       <div className="trail-card-bookmark">🔖</div>
 
       <div className="trail-card-header">
@@ -45,6 +50,15 @@ function TrailCard({ trail }: TrailCardProps) {
           </div>
 
           <div>
+            <div className="trail-card-stat-label">{t('trail.duration')}</div>
+            <p className="trail-card-stat-value">
+              {trail.estimatedDuration
+                ? `${Math.round(trail.estimatedDuration)} min`
+                : '-'}
+            </p>
+          </div>
+
+          <div>
             <div className="trail-card-stat-label">{t('trail.rating')}</div>
             <div className="trail-card-rating-wrapper">
               <span className="trail-card-stat-value">
@@ -71,7 +85,10 @@ function TrailCard({ trail }: TrailCardProps) {
               <span className="trail-card-placeholder-image">🖼️</span>
             )}
           </div>
-          <button type="button" className="trail-card-action-btn">
+          <button
+            type="button"
+            className="trail-card-action-btn"
+            onClick={() => onPlan(trail)}>
             {t('trail.button_text')}
           </button>
         </div>

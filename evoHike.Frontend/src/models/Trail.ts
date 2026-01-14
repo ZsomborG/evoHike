@@ -10,6 +10,7 @@ export class Trail {
   rating: number;
   reviewCount: number;
   coverPhotoPath: string;
+  estimatedDuration?: number;
 
   constructor(data: {
     id: string;
@@ -21,6 +22,7 @@ export class Trail {
     rating: number;
     reviewCount: number;
     coverPhotoPath: string;
+    estimatedDuration?: number;
   }) {
     this.id = data.id;
     this.name = data.name;
@@ -31,5 +33,6 @@ export class Trail {
     this.rating = data.rating;
     this.reviewCount = data.reviewCount;
     this.coverPhotoPath = data.coverPhotoPath;
+    this.estimatedDuration = data.estimatedDuration;
   }
 }

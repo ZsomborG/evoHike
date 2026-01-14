@@ -27,9 +27,9 @@ namespace evoHike.Backend.Controllers
         {
             try
             {
-                if (plannedHike.RouteId == 0)
+                if (plannedHike.HikingTrailId == 0)
                 {
-                    return BadRequest("RouteId is required.");
+                    return BadRequest("HikingTrailId is required.");
                 }
 
                 var createdHike = await _plannedHikeService.CreatePlannedHikeAsync(plannedHike);
