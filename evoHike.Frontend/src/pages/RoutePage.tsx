@@ -332,14 +332,11 @@ function RoutePage() {
 
   return (
     <div className="route-page-wrapper">
-      <h1 style={{ textAlign: 'center' }}>{t('routePageH1')}</h1>
+      <h1 className="route-page-title">{t('routePageH1')}</h1>
 
       {/* ha választunk a kurzor legyen célkereszt */}
       <div
-        style={{
-          position: 'relative',
-          cursor: selectionMode ? 'crosshair' : 'default',
-        }}>
+        className={`map-container-wrapper ${selectionMode ? 'selection-mode-active' : ''}`}>
           <div className="form-container">
               <RouteForm />
           </div>
@@ -377,23 +374,12 @@ function RoutePage() {
           {navIntermediates.map((pos, idx) => (
             <Marker key={`waypoint-${idx}`} position={pos} icon={waypointIcon}>
               <Popup>
-                <div style={{ textAlign: 'center' }}>
+                <div className="popup-content-wrapper">
                   <strong>Köztes pont {idx + 1}</strong>
                   <br />
                   <button
                     onClick={() => handleRemoveWaypoint(idx)}
-                    style={{
-                      marginTop: '5px',
-                      cursor: 'pointer',
-                      background: '#d9534f',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      padding: '2px 8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      margin: '5px auto 0',
-                    }}>
+                    className="popup-delete-btn">
                     <MdDelete style={{ marginRight: '4px' }} /> Törlés
                   </button>
                 </div>
@@ -403,26 +389,14 @@ function RoutePage() {
 
           {/* start pont megjelenítése */}
           {navStart && (
-             
             <Marker position={navStart} icon={startIcon}>
               <Popup>
-                <div style={{ textAlign: 'center' }}>
+                <div className="popup-content-wrapper">
                   <strong>Start pont</strong>
                   <br />
                   <button
                     onClick={handleRemoveStart}
-                    style={{
-                      marginTop: '5px',
-                      cursor: 'pointer',
-                      background: '#d9534f',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      padding: '2px 8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      margin: '5px auto 0',
-                    }}>
+                    className="popup-delete-btn">
                     <MdDelete style={{ marginRight: '4px' }} /> Törlés
                   </button>
                 </div>
@@ -432,26 +406,14 @@ function RoutePage() {
 
           {/* célpont megjelenítése */}
           {navEnd && (
-             
             <Marker position={navEnd} icon={endIcon}>
               <Popup>
-                <div style={{ textAlign: 'center' }}>
+                <div className="popup-content-wrapper">
                   <strong>Cél pont</strong>
                   <br />
                   <button
                     onClick={handleRemoveEnd}
-                    style={{
-                      marginTop: '5px',
-                      cursor: 'pointer',
-                      background: '#d9534f',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      padding: '2px 8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      margin: '5px auto 0',
-                    }}>
+                    className="popup-delete-btn">
                     <MdDelete style={{ marginRight: '4px' }} /> Törlés
                   </button>
                 </div>

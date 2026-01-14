@@ -1,5 +1,6 @@
 import React from 'react';
 import { MdLocationOn, MdFlag, MdDelete, MdAddLocation } from 'react-icons/md';
+import '../styles/RoutPageStyles.css';
 
 // itt vannak a propsok amiket kapunk
 interface MapContextMenuProps {
@@ -28,26 +29,16 @@ export default function MapContextMenu({
 
   return (
     <div
-      style={{
-        position: 'fixed', // hogy ne mozduljon el
-        top: y, // függőleges pozíció
-        left: x, // vízszintes pozíció
-        zIndex: 10000, // hogy minden felett legyen
-        backgroundColor: 'white',
-        border: '1px solid #ccc',
-        borderRadius: '4px',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-        padding: '5px 0',
-        minWidth: '150px',
-      }}>
+      className="map-context-menu"
+      style={{ top: y, left: x }} // a pozíció dinamikus, ez marad inline
+    >
       {/* start gomb zöld ikonnal */}
       <div
         className="context-menu-item"
         onClick={onNavFrom}
         onKeyDown={(e) => handleKeyDown(e, onNavFrom)}
         role="menuitem"
-        tabIndex={0}
-        style={{ display: 'flex', alignItems: 'center' }}>
+        tabIndex={0}>
         <MdLocationOn style={{ marginRight: '8px', color: '#5cb85c' }} />{' '}
         Navigáció innen
       </div>
@@ -57,8 +48,7 @@ export default function MapContextMenu({
         onClick={onNavTo}
         onKeyDown={(e) => handleKeyDown(e, onNavTo)}
         role="menuitem"
-        tabIndex={0}
-        style={{ display: 'flex', alignItems: 'center' }}>
+        tabIndex={0}>
         <MdFlag style={{ marginRight: '8px', color: '#d9534f' }} /> Navigáció
         ide
       </div>
@@ -68,8 +58,7 @@ export default function MapContextMenu({
         onClick={onAddWaypoint}
         onKeyDown={(e) => handleKeyDown(e, onAddWaypoint)}
         role="menuitem"
-        tabIndex={0}
-        style={{ display: 'flex', alignItems: 'center' }}>
+        tabIndex={0}>
         <MdAddLocation style={{ marginRight: '8px', color: '#FF9800' }} />{' '}
         Útvonal pont hozzáadása
       </div>
@@ -79,8 +68,7 @@ export default function MapContextMenu({
         onClick={onClearNav}
         onKeyDown={(e) => handleKeyDown(e, onClearNav)}
         role="menuitem"
-        tabIndex={0}
-        style={{ display: 'flex', alignItems: 'center' }}>
+        tabIndex={0}>
         <MdDelete style={{ marginRight: '8px', color: '#777' }} /> Navigáció
         törlése
       </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { MdLocationOn, MdFlag, MdDelete, MdAddLocation } from 'react-icons/md';
+import '../styles/RoutPageStyles.css';
 
 // itt vannak a propsok amiket kapunk
 interface MapNavigationControlsProps {
@@ -29,23 +30,11 @@ export default function MapNavigationControls({
   // ez egy segéd komponens a gombokhoz
   const Button = ({ onClick, isActive, icon, label, color }: ButtonProps) => (
     <button
+      className={`nav-btn ${isActive ? 'active' : 'inactive'}`}
       onClick={onClick}
       title={label}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '40px',
-        height: '40px',
-        backgroundColor: isActive ? '#e6f7ff' : 'white',
-        border: isActive ? `2px solid ${color}` : '1px solid #ccc',
-        borderRadius: '4px',
-        cursor: 'pointer',
-        marginBottom: '5px',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-        transition: 'all 0.2s',
-      }}>
-      <div style={{ color: color, fontSize: '24px', display: 'flex' }}>
+      style={{ borderColor: isActive ? color : undefined }}>
+      <div className="nav-btn-icon" style={{ color: color }}>
         {icon}
       </div>
     </button>
@@ -53,25 +42,8 @@ export default function MapNavigationControls({
 
   return (
     // itt van a panel jobb oldalt
-    <div
-      style={{
-        position: 'absolute',
-        top: '20px',
-        right: '20px',
-        zIndex: 1000,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-end',
-      }}>
-      <div
-        style={{
-          backgroundColor: 'white',
-          padding: '5px',
-          borderRadius: '8px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-          display: 'flex',
-          flexDirection: 'column',
-        }}>
+    <div className="map-nav-controls">
+      <div className="nav-controls-container">
         {/* start gomb zöld ikonnal */}
         <Button
           onClick={onSelectStartMode}
@@ -96,7 +68,7 @@ export default function MapNavigationControls({
           color="#FF9800"
           label="Köztes pont hozzáadása"
         />
-        <div style={{ height: '1px', background: '#eee', margin: '5px 0' }} />
+        <div className="nav-divider" />
         {/* törlés gomb szürke kukával */}
         <Button
           onClick={onClear}

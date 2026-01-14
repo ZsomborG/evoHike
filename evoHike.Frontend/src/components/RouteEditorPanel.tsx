@@ -6,6 +6,7 @@ import {
   MdDescription,
   MdAdd,
 } from 'react-icons/md';
+import '../styles/RoutPageStyles.css';
 
 // itt vannak a propsok amiket kapunk
 interface RouteEditorPanelProps {
@@ -55,40 +56,14 @@ export default function RouteEditorPanel({
   };
 
   return (
-    <div
-      style={{
-        padding: '1.5rem',
-        margin: '1rem 0',
-        border: '2px solid #FF9800',
-        borderRadius: '8px',
-        backgroundColor: '#fff8e1',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-      }}>
-      <h2
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginTop: 0,
-          color: '#E65100',
-        }}>
+    <div className="route-editor-panel">
+      <h2 className="editor-header">
         <MdEdit style={{ marginRight: '10px' }} /> Útvonal tervező
       </h2>
 
-      <div
-        style={{
-          display: 'flex',
-          gap: '20px',
-          flexWrap: 'wrap',
-          marginBottom: '15px',
-        }}>
-        <div style={{ flex: 1, minWidth: '250px' }}>
-          <label
-            htmlFor="route-name"
-            style={{
-              display: 'block',
-              marginBottom: '5px',
-              fontWeight: 'bold',
-            }}>
+      <div className="editor-form-row">
+        <div className="editor-input-group">
+          <label htmlFor="route-name" className="editor-label">
             Útvonal neve:
           </label>
           <input
@@ -97,23 +72,12 @@ export default function RouteEditorPanel({
             value={name}
             onChange={(e) => onNameChange(e.target.value)}
             placeholder="Pl. A kincshez vezető túra"
-            style={{
-              width: '100%',
-              padding: '8px',
-              borderRadius: '4px',
-              border: '1px solid #ccc',
-            }}
+            className="editor-input"
           />
         </div>
 
-        <div style={{ flex: 2, minWidth: '250px' }}>
-          <label
-            htmlFor="route-desc"
-            style={{
-              display: 'block',
-              marginBottom: '5px',
-              fontWeight: 'bold',
-            }}>
+        <div className="editor-input-group large">
+          <label htmlFor="route-desc" className="editor-label">
             <MdDescription style={{ verticalAlign: 'middle' }} /> Leírás:
           </label>
           <input
@@ -122,60 +86,30 @@ export default function RouteEditorPanel({
             value={description}
             onChange={(e) => onDescriptionChange(e.target.value)}
             placeholder="Pl. EXTRÉÉÉÉM DE NAGYON vigyázzni kell mert sok a kalóz errefelé !!4"
-            style={{
-              width: '100%',
-              padding: '8px',
-              borderRadius: '4px',
-              border: '1px solid #ccc',
-            }}
+            className="editor-input"
           />
         </div>
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          gap: '20px',
-          padding: '10px',
-          backgroundColor: 'rgba(255,255,255,0.6)',
-          borderRadius: '4px',
-        }}>
-        <div
-          style={{ display: 'flex', alignItems: 'center', fontSize: '1.1rem' }}>
+      <div className="editor-stats-row">
+        <div className="editor-stat-item">
           <MdStraighten style={{ marginRight: '5px', color: '#1976D2' }} />{' '}
           <strong>Távolság:</strong>&nbsp;{formatDistance(distance)}
         </div>
-        <div
-          style={{ display: 'flex', alignItems: 'center', fontSize: '1.1rem' }}>
+        <div className="editor-stat-item">
           <MdTimer style={{ marginRight: '5px', color: '#1976D2' }} />{' '}
           <strong>Idő:</strong>&nbsp;{formatTime(time)}
         </div>
       </div>
 
-      <div
-        style={{
-          marginTop: '20px',
-          display: 'flex',
-          justifyContent: 'flex-start',
-        }}>
+      <div className="editor-actions">
         <button
+          className={`editor-add-btn ${isFormValid ? 'valid' : 'invalid'}`}
           type="button"
           onClick={isFormValid ? onSave : undefined}
           onMouseEnter={handleMouseEnter}
           style={{
             transform: `translateX(${buttonOffset}px)`,
-            transition: 'transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
-            backgroundColor: isFormValid ? '#4CAF50' : '#FF5722',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '10px 20px',
-            fontSize: '16px',
-            fontWeight: 'bold',
-            cursor: isFormValid ? 'pointer' : 'not-allowed',
-            display: 'flex',
-            alignItems: 'center',
-            boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
           }}>
           <MdAdd style={{ marginRight: '8px' }} /> Útvonal hozzáadása
         </button>

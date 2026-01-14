@@ -2,6 +2,7 @@ import { Trail } from '../models/Trail';
 import type { OverpassElement } from '../api/overpassApi';
 import { Map } from 'leaflet';
 import { MdLocationOn, MdPhotoCamera, MdMap } from 'react-icons/md';
+import '../styles/RoutPageStyles.css';
 
 // itt vannak a propsok amiket kapunk
 interface SelectedTrailDetailsProps {
@@ -17,15 +18,8 @@ export default function SelectedTrailDetails({
   map,
 }: SelectedTrailDetailsProps) {
   return (
-    <div
-      style={{
-        padding: '1rem',
-        margin: '1rem 0',
-        border: '2px solid #6FA1EC',
-        borderRadius: '8px',
-        backgroundColor: '#eef6ff',
-      }}>
-      <h2 style={{ display: 'flex', alignItems: 'center' }}>
+    <div className="selected-trail-details">
+      <h2 className="trail-header">
         <MdLocationOn
           size={32}
           style={{
@@ -42,20 +36,14 @@ export default function SelectedTrailDetails({
         m | <strong>Idő:</strong> {Math.floor(trail.time / 60)} óra{' '}
         {trail.time % 60} perc
       </p>
-      <hr
-        style={{ margin: '10px 0', border: '0', borderTop: '1px solid #ccc' }}
-      />
-      <p style={{ fontStyle: 'italic', lineHeight: '1.5' }}>
-        {trail.description}
-      </p>
-      <hr
-        style={{ margin: '10px 0', border: '0', borderTop: '1px solid #ccc' }}
-      />
+      <hr className="trail-divider" />
+      <p className="trail-description">{trail.description}</p>
+      <hr className="trail-divider" />
 
       {/* felhasználói fotók ha vannak */}
       {trail.userPhotos && trail.userPhotos.length > 0 && (
-        <div style={{ marginBottom: '15px' }}>
-          <h3 style={{ display: 'flex', alignItems: 'center' }}>
+        <div className="trail-photos-section">
+          <h3 className="trail-section-header">
             <MdPhotoCamera
               size={26}
               style={{
@@ -65,41 +53,24 @@ export default function SelectedTrailDetails({
             />{' '}
             Felhasználói fotók:
           </h3>
-          <div
-            style={{
-              display: 'flex',
-              gap: '10px',
-              overflowX: 'auto',
-              padding: '10px 0',
-            }}>
+          <div className="trail-photos-container">
             {trail.userPhotos.map((photoUrl, index) => (
               <img
                 key={index}
                 src={photoUrl}
                 alt={`Túra fotó ${index + 1}`}
-                style={{
-                  height: '120px',
-                  borderRadius: '8px',
-                  objectFit: 'cover',
-                  border: '1px solid #ddd',
-                }}
+                className="trail-photo"
               />
             ))}
           </div>
-          <hr
-            style={{
-              margin: '10px 0',
-              border: '0',
-              borderTop: '1px solid #ccc',
-            }}
-          />
+          <hr className="trail-divider" />
         </div>
       )}
 
       {/* közeli látnivalók listázása */}
       {pois.length > 0 && (
         <div>
-          <h3 style={{ display: 'flex', alignItems: 'center' }}>
+          <h3 className="trail-section-header">
             <MdMap
               size={26}
               style={{
@@ -110,27 +81,17 @@ export default function SelectedTrailDetails({
             />{' '}
             Közeli látnivalók az útvonal mentén ({pois.length} db):
           </h3>
-          <ul style={{ paddingLeft: '30px', marginTop: '10px' }}>
+          <ul className="trail-pois-list">
             {pois.map((poi) => (
               /* ha rákattintunk odarepül a térkép */
-              <li key={poi.id} style={{ marginBottom: '4px' }}>
+              <li key={poi.id} className="trail-poi-item">
                 <button
                   type="button"
                   onClick={() => map?.flyTo([poi.lat, poi.lon], 18)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    padding: 0,
-                    cursor: 'pointer',
-                    color: '#3388ff',
-                    textAlign: 'left',
-                    font: 'inherit',
-                  }}
+                  className="trail-poi-btn"
                   title="Ugrás a térképen">
-                  <span style={{ textDecoration: 'underline' }}>
-                    <strong>{poi.tags?.name}</strong>
-                  </span>{' '}
-                  <small style={{ color: 'black', textDecoration: 'none' }}>
+                  <span className="trail-poi-name">{poi.tags?.name}</span>{' '}
+                  <small className="trail-poi-type">
                     (
                     {poi.tags?.tourism ||
                       poi.tags?.natural ||
