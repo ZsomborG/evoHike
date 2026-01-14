@@ -7,62 +7,57 @@
     "difficulty": 0,
     "coverPhotoPath": "",
     "elevationGain": 431,
+    "time": 120,
     "rating": 4.2,
-    "reviewCount": 7
+    "reviewCount": 7,
+    "description": "Egy kellemes, közepes nehézségű túra a Bükk szívében, csodálatos kilátással a környező völgyekre. Családoknak is ajánlott.",
+    "userPhotos": [
+      "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=300&h=200&fit=crop",
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&h=200&fit=crop"
+    ]
   },
   {
     "id": "2",
-    "name": "Kékes Csúcs-túra",
-    "location": "Mátra",
+    "name": "Bükki Vadászösvény",
+    "location": "Bükk",
     "length": 12500,
     "difficulty": 2,
     "coverPhotoPath": "",
     "elevationGain": 850,
+    "time": 120,
     "rating": 4.8,
-    "reviewCount": 24
+    "reviewCount": 24,
+    "description": "Magyarország legmagasabb pontjának meghódítása. Meredek emelkedőkkel tarkított útvonal, de a panoráma kárpótol minden fáradtságért.",
+    "userPhotos": [
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=300&h=200&fit=crop",
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop",
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=300&h=200&fit=crop"
+    ]
   },
   {
     "id": "3",
-    "name": "Nagymaros - Prédikálószék",
-    "location": "Dunakanyar",
+    "name": "Bükk - Vörös-kő",
+    "location": "Bükk",
     "length": 9200,
     "difficulty": 1,
     "coverPhotoPath": "",
     "elevationGain": 560,
+    "time": 120,
     "rating": 4.5,
-    "reviewCount": 15
+    "reviewCount": 15,
+    "description": "A Dunakanyar egyik legszebb pontja. A Prédikálószékről nyíló kilátás a visegrádi várra és a Duna kanyarulatára felejthetetlen élmény."
   },
   {
     "id": "4",
-    "name": "Rám-szakadék kaland",
-    "location": "Pilis",
+    "name": "Bükk - Nagy-mező",
+    "location": "Bükk",
     "length": 7100,
     "difficulty": 2,
     "coverPhotoPath": "",
     "elevationGain": 320,
+    "time": 120,
     "rating": 4.9,
-    "reviewCount": 42
-  },
-  {
-    "id": "5",
-    "name": "Spartacus-ösvény",
-    "location": "Visegrádi-hegység",
-    "length": 14000,
-    "difficulty": 1,
-    "coverPhotoPath": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400&h=250&fit=crop",
-    "elevationGain": 410,
-    "rating": 4,
-    "reviewCount": 11
-  },
-  {
-    "id": "6",
-    "name": "Vörös-kő extrém kör",
-    "location": "Bükk",
-    "length": 18500,
-    "difficulty": 3,
-    "coverPhotoPath": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=250&fit=crop",
-    "elevationGain": 1150,
-    "rating": 4.7,
-    "reviewCount": 5
+    "reviewCount": 42,
+    "description": "Izgalmas szurdoktúra létrákkal és kapaszkodókkal. Csak megfelelő lábbeliben és száraz időben ajánlott!"
   }
 ]
