@@ -5,6 +5,7 @@ import {
   MdStraighten,
   MdDescription,
   MdAdd,
+  MdClose,
 } from 'react-icons/md';
 import '../styles/RoutPageStyles.css';
 
@@ -17,6 +18,7 @@ interface RouteEditorPanelProps {
   onNameChange: (value: string) => void; // ez fut le ha írunk a névbe
   onDescriptionChange: (value: string) => void; // ez fut le ha írunk a leírásba
   onSave: () => void; // ez menti el az útvonalat
+  closeRouteEditor: () => void; // Editor bezarasa gombbal
 }
 
 // ez a szerkesztő panel a térkép alatt
@@ -28,6 +30,7 @@ export default function RouteEditorPanel({
   onNameChange,
   onDescriptionChange,
   onSave,
+  closeRouteEditor,
 }: RouteEditorPanelProps) {
   const [buttonOffset, setButtonOffset] = useState(0);
 
@@ -62,7 +65,16 @@ export default function RouteEditorPanel({
   return (
     <div className="route-editor-panel">
       <h2 className="editor-header">
-        <MdEdit style={{ marginRight: '10px' }} /> Útvonal tervező
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <MdEdit style={{ marginRight: '10px' }} /> Útvonal tervező
+        </div>
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: '10px' }}>
+          <MdClose
+            style={{ cursor: 'pointer' }}
+            title="Menü bezárása"
+            onClick={closeRouteEditor}
+          />
+        </div>
       </h2>
 
       <div className="editor-form-row">

@@ -365,7 +365,7 @@ function RoutePage() {
   // segédfüggvény a sidebar tartalmának kiválasztására
   const renderSidebarContent = () => {
     // utvonal tervezes menu
-    if (navStart || navEnd) {
+    if (navStart || navEnd || createStartButton) {
       return (
         <RouteEditorPanel
           name={customRouteName}
@@ -375,11 +375,11 @@ function RoutePage() {
           onNameChange={setCustomRouteName}
           onDescriptionChange={setCustomRouteDesc}
           onSave={() => alert(`Útvonal mentve: ${customRouteName}`)}
+          closeRouteEditor={() => {
+            setCreateStartButton(false);
+          }}
         />
       );
-    }
-    if (createStartButton) {
-      return <p>Új útvonal hozzáadása menü</p>;
     }
 
     // alapertelmezetten megjeleniti az utvonalak listajat
