@@ -44,12 +44,16 @@ export default function RouteEditorPanel({
     return (meters / 1000).toFixed(2) + ' km';
   };
 
-  const isFormValid = name.trim().length > 0 && description.trim().length > 0;
+  const isFormValid =
+    name.trim().length > 0 &&
+    description.trim().length > 0 &&
+    distance > 0 &&
+    time > 0;
 
   const handleMouseEnter = () => {
     if (!isFormValid) {
       // ha nincs kitöltve akkor ugrál a gomb
-      setButtonOffset((prev) => (prev === 0 ? 300 : 0));
+      setButtonOffset((prev) => (prev === 0 ? 100 : 0));
     } else {
       setButtonOffset(0);
     }
@@ -109,7 +113,7 @@ export default function RouteEditorPanel({
           onClick={isFormValid ? onSave : undefined}
           onMouseEnter={handleMouseEnter}
           style={{
-            transform: `translateX(${buttonOffset}px)`,
+            transform: `translateY(${buttonOffset}px)`,
           }}>
           <MdAdd style={{ marginRight: '8px' }} /> Útvonal hozzáadása
         </button>

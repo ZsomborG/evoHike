@@ -12,9 +12,13 @@ import type { DifficultyLevel } from '../types/difficulty';
 
 interface TrailListPanelProps {
   onSelectTrail: (trailId: string) => void;
+  onStartCreateRoute: () => void;
 }
 
-export default function TrailListPanel({ onSelectTrail }: TrailListPanelProps) {
+export default function TrailListPanel({
+  onSelectTrail,
+  onStartCreateRoute,
+}: TrailListPanelProps) {
   const [searchTerm, setSearchTerm] = useState('');
 
   // átalakítjuk a nyers json adatokat trail objektumokká
@@ -52,6 +56,7 @@ export default function TrailListPanel({ onSelectTrail }: TrailListPanelProps) {
           <MdAddLocation
             style={{ cursor: 'pointer' }}
             title="Új útvonal hozzáadása"
+            onClick={onStartCreateRoute}
           />
         </div>
       </h2>

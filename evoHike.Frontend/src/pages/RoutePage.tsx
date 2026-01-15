@@ -120,6 +120,9 @@ function RoutePage() {
     time: 0,
   });
 
+  //Utvonal hozzadasa sidebar allapot valtozo
+  const [createStartButton, setCreateStartButton] = useState(false);
+
   // ref a navigációs állapot követésére
   const isNavigationActiveRef = useRef(false);
 
@@ -359,6 +362,37 @@ function RoutePage() {
     return null;
   }, [selectedTrail]);
 
+  // segédfüggvény a sidebar tartalmának kiválasztására
+  const renderSidebarContent = () => {
+    // utvonal tervezes menu
+    if (navStart || navEnd) {
+      return (
+        <RouteEditorPanel
+          name={customRouteName}
+          description={customRouteDesc}
+          distance={customRouteStats.distance}
+          time={customRouteStats.time}
+          onNameChange={setCustomRouteName}
+          onDescriptionChange={setCustomRouteDesc}
+          onSave={() => alert(`Útvonal mentve: ${customRouteName}`)}
+        />
+      );
+    }
+    if (createStartButton) {
+      return <p>Új útvonal hozzáadása menü</p>;
+    }
+
+    // alapertelmezetten megjeleniti az utvonalak listajat
+    return (
+      <TrailListPanel
+        onSelectTrail={handleTrailCardSelect}
+        onStartCreateRoute={() => {
+          setCreateStartButton(true);
+        }}
+      />
+    );
+  };
+
   return (
     <div className="route-page-wrapper">
       <h1 className="route-page-title">{t('routePageH1')}</h1>
@@ -367,24 +401,8 @@ function RoutePage() {
       </div>
 
       <div className="map-section-container">
-        {/* útvonal szerkesztő panel - bal oldalon */}
-        {navStart || navEnd ? (
-          <div className="map-sidebar">
-            <RouteEditorPanel
-              name={customRouteName}
-              description={customRouteDesc}
-              distance={customRouteStats.distance}
-              time={customRouteStats.time}
-              onNameChange={setCustomRouteName}
-              onDescriptionChange={setCustomRouteDesc}
-              onSave={() => alert(`Útvonal mentve: ${customRouteName}`)}
-            />
-          </div>
-        ) : (
-          <div className="map-sidebar">
-            <TrailListPanel onSelectTrail={handleTrailCardSelect} />
-          </div>
-        )}
+        {/* bal oldali sáv tartalma a segédfüggvény alapján */}
+        <div className="map-sidebar">{renderSidebarContent()}</div>
 
         {/* ha választunk a kurzor legyen célkereszt */}
         <div
