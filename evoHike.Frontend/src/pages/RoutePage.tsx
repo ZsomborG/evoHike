@@ -330,7 +330,7 @@ function RoutePage() {
             ([lon, lat]) => [lat, lon] as [number, number],
           );
           const bounds = latLngBounds(leafletCoords);
-          map.flyToBounds(bounds, { padding: [50, 50], duration: 1.5 });
+          map.fitBounds(bounds, { padding: [50, 50], animate: false });
         }
 
         // felgörgetés a térképhez
