@@ -22,6 +22,7 @@ interface OverpassResponse {
 
 // Egyszerű in-memory cache a válaszok tárolására
 const poiCache = new Map<string, OverpassElement[]>();
+const CACHE_LIMIT = 50;
 
 /**
  * Lekéri a nevezetességeket egy útvonal mentén (Around).
@@ -57,7 +58,11 @@ export const getNearbyPOIs = async (
   // Cache ellenőrzése: Ha már lekértük ezt a sugarat ehhez az útvonalhoz, visszaadjuk a tárolt választ
   const cacheKey = `${radius}-${coordString}`;
   if (poiCache.has(cacheKey)) {
-    return poiCache.get(cacheKey)!;
+    const cachedData = poiCache.get(cacheKey)!;
+    // frissítjük a sorrendet (vagyis elsőnek kötöröljük majd ujra hozzáadjuk) hogy ez legyen a legújabb
+    poiCache.delete(cacheKey);
+    poiCache.set(cacheKey, cachedData);
+    return cachedData;
   }
 
   // Overpass QL lekérdezés összeállítása
@@ -79,6 +84,15 @@ export const getNearbyPOIs = async (
       `data=${encodeURIComponent(query)}`,
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
     );
+
+    // Cache limit ellenőrzése: ha elértük az 50-et, töröljük a legrégebbit
+    if (poiCache.size >= CACHE_LIMIT) {
+      const oldestKey = poiCache.keys().next().value;
+      if (oldestKey) {
+        console.log('Cache limit elérve, legrégebbi elem törlése:', oldestKey);
+        poiCache.delete(oldestKey);
+      }
+    }
 
     // Eredmény mentése a cache-be
     poiCache.set(cacheKey, response.data.elements);

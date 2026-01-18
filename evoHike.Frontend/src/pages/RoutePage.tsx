@@ -129,6 +129,9 @@ function RoutePage() {
   // ref a térkép konténerhez a görgetéshez
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
+  // ref az utolsó API kérés azonosításához
+  const lastRequestIdRef = useRef<number>(0);
+
   useEffect(() => {
     isNavigationActiveRef.current = !!(
       selectionMode ||
@@ -141,6 +144,10 @@ function RoutePage() {
   // ez fut le ha kiválasztunk egy útvonalat
   const handleRouteSelect = useCallback(
     async (coordinates: [number, number][]) => {
+      // generálunk egy új ID-t a mostani kérésnek
+      const requestId = Date.now();
+      lastRequestIdRef.current = requestId;
+
       // geojson konverzió leaflethez
       // fontos mert a geojson fordítva tárolja a koordinátákat
       const apiCoordinates = coordinates.map(([lon, lat]) => ({ lat, lon }));
@@ -157,9 +164,12 @@ function RoutePage() {
       // 200 méteres sugárban keresünk
       const results = await getNearbyPOIs(apiCoordinates, 200);
 
-      // csak a nevesített pontokat tartjuk meg
-      const namedPois = results.filter((p) => p.tags && p.tags.name);
-      setPois(namedPois);
+      // csak akkor frissítjük a state-et ha ez még mindig a legutolsó kérés
+      if (lastRequestIdRef.current === requestId) {
+        // csak a nevesített pontokat tartjuk meg
+        const namedPois = results.filter((p) => p.tags && p.tags.name);
+        setPois(namedPois);
+      }
     },
     [],
   );
