@@ -20,6 +20,6 @@ public class OpenWeatherForecastController : ControllerBase
 
     public async Task<List<OpenWeatherForecast>> Get()
     {
-        return await _weatherService.GetWeatherForecastAsync();
+        return await _weatherService.GetWeatherForecastAsync("Eger",3);
     }
 }

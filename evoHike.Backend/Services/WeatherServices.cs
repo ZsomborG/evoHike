@@ -1,42 +1,70 @@
+using System.Runtime.InteropServices.JavaScript;
+using OpenMeteo.Geocoding;
+using OpenMeteo.Weather.Forecast.Options;
+
 namespace evoHike.Backend.Services;
 using evoHike.Backend.Models;
-using System.Net.Http.Json;
+using OpenMeteo;
 
 public class WeatherService
 {
-    private readonly HttpClient _httpClient;
+    private readonly OpenMeteoClient _client;
 
-    public WeatherService(HttpClient httpClient)
+    public WeatherService(OpenMeteoClient client)
     {
-        _httpClient = httpClient;
+        _client = client;
     }
 
-    public async Task<List<OpenWeatherForecast>> GetWeatherForecastAsync()
+    public async Task<List<OpenWeatherForecast>> GetWeatherForecastAsync(string cityName, int forecastDays)
     {
-    
-        string url = "https://api.open-meteo.com/v1/forecast?latitude=48.1031&longitude=20.7781&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,precipitation_probability,weather_code&forecast_days=1";
+        var geoOption = new GeocodingOptions(cityName) ; // itt hoz létre egy geoption nevu Geocoding Options peldanyt
+        var geoResult = await _client.GetLocationDataAsync(geoOption);
 
-        var response = await _httpClient.GetFromJsonAsync<OpenWeatherForecastDto>(url);
+        var location = geoResult.Locations[0]; // azért nulla mert a legpontosabb egyezés kell
+
+        var weatherOption = new WeatherForecastOptions
+        {
+            Latitude = location.Latitude,
+            Longitude = location.Longitude,
+            
+            Start_date = DateOnly.FromDateTime(DateTime.Now),
+            End_date = DateOnly.FromDateTime(DateTime.Now.AddDays(forecastDays)),
+            
+            Hourly = new HourlyOptions
+            {
+                HourlyOptionsParameter.temperature_2m,
+                HourlyOptionsParameter.relativehumidity_2m,
+                HourlyOptionsParameter.apparent_temperature,
+                HourlyOptionsParameter.windspeed_10m,
+                HourlyOptionsParameter.precipitation_probability,
+                HourlyOptionsParameter.weathercode
+            }
+                
+        };
+
+        var response = await _client.QueryWeatherApiAsync(weatherOption);
         
         var forecast = new List<OpenWeatherForecast>();
-        var now = DateTime.Now; 
+        var now = DateTime.Now;
 
-        if (response == null || !response.IsValid())
+        if (response?.Hourly?.Time == null) 
         {
             return new List<OpenWeatherForecast>();
         }
-        {
-            var hourlyData = response.hourly!;
 
-            for (int i = 0; i < hourlyData.HourlyDateTime!.Length; i++)
+        for (int i = 0; i < response.Hourly.Time.Length; i++)
+        {
+         
+            DateTime apiTime = response.Hourly.Time[i].DateTime;
+
+            
+            if (apiTime >= now)
             {
-                DateTime apiTime = DateTime.Parse(hourlyData.HourlyDateTime[i]);
-                if (apiTime >= now)
-                {
-                    forecast.Add(hourlyData.ToWeatherForecast(i, apiTime));
-                }
+                var item = OpenWeatherForecast.ToWeatherForecast(i, apiTime, response);
+                forecast.Add(item);
             }
         }
+        
         return forecast;
     }
 }

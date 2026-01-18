@@ -1,5 +1,6 @@
 namespace evoHike.Backend.Models;
 using System.Text.Json.Serialization;
+using OpenMeteo.Weather;
 
 public class OpenWeatherForecastDto
 {
@@ -54,19 +55,7 @@ public class CurrentWeather
                length > 0;
     }
     
-    public OpenWeatherForecast ToWeatherForecast(int index, DateTime forecastTime)
-    {
-        return new OpenWeatherForecast
-        {
-            ForecastDatetime = forecastTime,
-            TemperatureC = HourlyTemperature![index],
-            FeelsLikeC = HourlyApparentTemperature![index],
-            WindSpeed_ms = (int)HourlyWindSpeed![index],
-            HumidityPercent = HourlyRelativeHumidity![index],
-            Pop = HourlyPrecipitation![index],
-            WeatherCode = (int)HourlyWeatherCode![index]
-        };
-    }
+    
 
  }
 
@@ -79,4 +68,19 @@ public class OpenWeatherForecast
     public int? HumidityPercent { get; set; }
     public double? Pop { get; set; } 
     public int? WeatherCode { get; set; }
+    
+    public static OpenWeatherForecast ToWeatherForecast(int index, DateTime forecastTime,OpenMeteo.Weather.Forecast.ResponseModel.WeatherForecast forecast)
+    {
+        
+        return new OpenWeatherForecast
+        {
+            ForecastDatetime = forecastTime,
+            TemperatureC = forecast.Hourly?.Temperature_2m![index],
+            FeelsLikeC = forecast.Hourly?.Apparent_temperature![index],
+            WindSpeed_ms = (int)forecast.Hourly?.Windspeed_10m![index]!,
+            HumidityPercent = forecast.Hourly?.Relativehumidity_2m![index],
+            Pop = forecast.Hourly?.Precipitation_probability![index],
+            WeatherCode = forecast.Hourly?.Weathercode![index]
+        };
+    }
 }
