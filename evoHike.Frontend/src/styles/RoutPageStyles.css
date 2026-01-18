@@ -11,7 +11,7 @@
 }
 
 .map {
-  height: 600px;
+  height: 100%;
   width: 100%;
   margin-top: 0; /* a konténer adja majd a margót */
   display: block;
@@ -58,6 +58,7 @@
 
 .map-container-wrapper {
   position: relative;
+  height: 100%;
 }
 
 .map-container-wrapper.selection-mode-active {
@@ -445,11 +446,15 @@
   gap: 20px;
   margin-top: 2rem;
   align-items: stretch;
+  height: 600px;
 }
 
 .map-sidebar {
   width: 350px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* --- TrailListPanel --- */
@@ -461,7 +466,8 @@
   background-color: #fff8e1;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   height: 100%;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .trail-list-header {
@@ -474,6 +480,9 @@
 /* --- Trail List Cards --- */
 .trail-list-cards {
   margin-top: 15px;
+  overflow-y: auto;
+  flex-grow: 1;
+  min-height: 0;
 }
 
 .trail-list-card {
