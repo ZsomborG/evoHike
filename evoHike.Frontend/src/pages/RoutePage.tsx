@@ -39,7 +39,6 @@ import MapLegend from '../components/MapLegend';
 import MapNavigationControls from '../components/MapNavigationControls';
 import RouteEditorPanel from '../components/RouteEditorPanel';
 import { MdDelete } from 'react-icons/md';
-import RouteForm from '../components/RouteForm';
 import TrailListPanel from '../components/TrailListPanel';
 
 const geojson = routeData as FeatureCollection;
@@ -392,10 +391,6 @@ function RoutePage() {
   return (
     <div className="route-page-wrapper">
       <h1 className="route-page-title">{t('routePageH1')}</h1>
-      <div className="form-container">
-        <RouteForm />
-      </div>
-
       <div className="map-section-container">
         {/* bal oldali sáv tartalma a segédfüggvény alapján */}
         <div className="map-sidebar">{renderSidebarContent()}</div>

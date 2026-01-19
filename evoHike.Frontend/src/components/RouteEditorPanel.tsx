@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import type { ChangeEvent } from 'react';
 import {
   MdEdit,
   MdTimer,
@@ -7,7 +8,10 @@ import {
   MdAdd,
   MdClose,
 } from 'react-icons/md';
+import { BiLeftArrow, BiRightArrow, BiUpload } from 'react-icons/bi';
 import '../styles/RoutPageStyles.css';
+import { useRouteForm } from '../hooks/useRouteForm';
+import { useTranslation } from 'react-i18next';
 
 // itt vannak a propsok amiket kapunk
 interface RouteEditorPanelProps {
@@ -32,8 +36,6 @@ export default function RouteEditorPanel({
   onSave,
   closeRouteEditor,
 }: RouteEditorPanelProps) {
-  const [buttonOffset, setButtonOffset] = useState(0);
-
   // idő formázása
   const formatTime = (seconds: number) => {
     const h = Math.floor(seconds / 3600);
@@ -47,19 +49,44 @@ export default function RouteEditorPanel({
     return (meters / 1000).toFixed(2) + ' km';
   };
 
+  const { t } = useTranslation();
+  const { gpxInputRef, handleGpxChange, triggerGpxInput, gpxFile, clearGpx } =
+    useRouteForm();
+
+  const [images, setImages] = useState<File[]>([]);
+  const totalSlots = Math.max(3, images.length + 1);
+
   const isFormValid =
     name.trim().length > 0 &&
     description.trim().length > 0 &&
     distance > 0 &&
     time > 0;
 
-  const handleMouseEnter = () => {
-    if (!isFormValid) {
-      // ha nincs kitöltve akkor ugrál a gomb
-      setButtonOffset((prev) => (prev === 0 ? 100 : 0));
-    } else {
-      setButtonOffset(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const newFile = e.target.files[0];
+      if (newFile) {
+        // Csak 5MB alatti képek
+        if (newFile.size > 5 * 1024 * 1024) {
+          alert('A kép túl nagy! Max 5MB megengedett.');
+          return;
+        }
+        setImages((prev) => [...prev, newFile]);
+      }
+      setTimeout(() => scrollCarousel(120), 100);
     }
+  };
+  const scrollCarousel = (offset: number) => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({
+        left: offset,
+        behavior: 'smooth',
+      });
+    }
+  };
+  const removeImage = (indexToRemove: number) => {
+    setImages((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
   return (
@@ -110,25 +137,114 @@ export default function RouteEditorPanel({
       <div className="editor-stats-row">
         <div className="editor-stat-item">
           <MdStraighten style={{ marginRight: '5px', color: '#1976D2' }} />{' '}
-          <strong>Távolság:</strong>&nbsp;{formatDistance(distance)}
-        </div>
-        <div className="editor-stat-item">
-          <MdTimer style={{ marginRight: '5px', color: '#1976D2' }} />{' '}
-          <strong>Idő:</strong>&nbsp;{formatTime(time)}
+          <strong className="route-data">Távolság:</strong>&nbsp;
+          {formatDistance(distance)}
+          <div className="editor-stat-item">
+            <MdTimer style={{ marginRight: '5px', color: '#1976D2' }} />{' '}
+            <strong className="route-data">Idő:</strong>&nbsp;{formatTime(time)}
+          </div>
         </div>
       </div>
+      <div className="pics-container">
+        <div id="carousel" className="slider">
+          <div
+            id="carousel-slides"
+            className="slides"
+            ref={carouselRef}
+            style={{ display: 'flex', overflowX: 'auto' }}>
+            {[...Array(totalSlots)].map((_, index) => {
+              const image = images[index];
 
+              return (
+                <div className="slide" key={index}>
+                  {image ? (
+                    // Ha van kép ezen az indexen, megjelenítjük az előnézetet
+                    <div className="image-preview">
+                      <img src={URL.createObjectURL(image)} alt="túra kép" />
+                      <button
+                        onClick={() => removeImage(index)}
+                        className="delete-btn">
+                        ×
+                      </button>
+                    </div>
+                  ) : (
+                    // Ha nincs kép, ez egy feltöltő placeholder
+                    <label className="upload-placeholder">
+                      {index === images.length ? (
+                        <>
+                          <span>+</span>
+                          <input
+                            type="file"
+                            hidden
+                            onChange={(e) => handleUpload(e)}
+                            accept="image/*"
+                          />
+                        </>
+                      ) : null}
+                    </label>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div className="buttons">
+          <button className="btn-prev" onClick={() => scrollCarousel(-120)}>
+            <BiLeftArrow size={18} />
+          </button>
+          <button className="btn-next" onClick={() => scrollCarousel(120)}>
+            <BiRightArrow size={18} />
+          </button>
+        </div>
+      </div>
       <div className="editor-actions">
         <button
           className={`editor-add-btn ${isFormValid ? 'valid' : 'invalid'}`}
           type="button"
-          onClick={isFormValid ? onSave : undefined}
-          onMouseEnter={handleMouseEnter}
-          style={{
-            transform: `translateY(${buttonOffset}px)`,
-          }}>
+          onClick={isFormValid ? onSave : undefined}>
           <MdAdd style={{ marginRight: '8px' }} /> Útvonal hozzáadása
         </button>
+      </div>
+
+      <div className="separator">
+        <span>VAGY</span>
+      </div>
+
+      <div
+        className="uploadTrailBtn"
+        style={{ position: 'relative', width: '100%' }}>
+        <input
+          type="file"
+          ref={gpxInputRef}
+          onChange={handleGpxChange}
+          style={{ display: 'none' }}
+          accept=".gpx"
+        />
+
+        <button
+          type="button"
+          className="route-upload-gpx-btn"
+          onClick={triggerGpxInput}>
+          {gpxFile ? (
+            `📄 ${gpxFile.name}`
+          ) : (
+            <>
+              <BiUpload style={{ marginRight: '8px' }} />
+              {t('routeForm.upload_file')}
+            </>
+          )}
+        </button>
+        {gpxFile && (
+          <button
+            type="button"
+            className="route-form-gpx-remove"
+            onClick={(e) => {
+              e.stopPropagation();
+              clearGpx();
+            }}>
+            ✕
+          </button>
+        )}
       </div>
     </div>
   );

@@ -65,7 +65,7 @@
   "routeForm": {
     "route_name": "Trail name",
     "add_photo": "Add photo",
-    "upload_file": "Trail file (.gpx)",
+    "upload_file": "File Upload (.gpx)",
     "trail_description": "Short description...",
     "poi": {
       "poi": "Point of Interests",
