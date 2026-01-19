@@ -40,8 +40,8 @@ export default function RouteEditorPanel({
   const formatTime = (seconds: number) => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
-    if (h > 0) return `${h} óra ${m} perc`;
-    return `${m} perc`;
+    if (h > 0) return `${h} ó ${m} p`;
+    return `${m} p`;
   };
 
   // távolság formázása
@@ -139,10 +139,10 @@ export default function RouteEditorPanel({
           <MdStraighten style={{ marginRight: '5px', color: '#1976D2' }} />{' '}
           <strong className="route-data">Távolság:</strong>&nbsp;
           {formatDistance(distance)}
-          <div className="editor-stat-item">
-            <MdTimer style={{ marginRight: '5px', color: '#1976D2' }} />{' '}
-            <strong className="route-data">Idő:</strong>&nbsp;{formatTime(time)}
-          </div>
+        </div>
+        <div className="editor-stat-item">
+          <MdTimer style={{ marginRight: '5px', color: '#1976D2' }} />{' '}
+          <strong className="route-data">Idő:</strong>&nbsp;{formatTime(time)}
         </div>
       </div>
       <div className="pics-container">

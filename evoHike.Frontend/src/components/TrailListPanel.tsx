@@ -22,19 +22,19 @@ export default function TrailListPanel({
   const [searchTerm, setSearchTerm] = useState('');
 
   // átalakítjuk a nyers json adatokat trail objektumokká
-  const trails = trailData.map((nyersAdat) => {
+  const trails = trailData.map((rawData) => {
     // létrehozunk egy új trail objektumot
     const trailObjektum = new Trail({
-      id: nyersAdat.id,
-      name: nyersAdat.name,
-      location: nyersAdat.location,
-      length: nyersAdat.length,
-      elevationGain: nyersAdat.elevationGain,
-      time: nyersAdat.time,
-      rating: nyersAdat.rating,
-      reviewCount: nyersAdat.reviewCount,
-      coverPhotoPath: nyersAdat.coverPhotoPath,
-      difficulty: nyersAdat.difficulty as DifficultyLevel,
+      id: rawData.id,
+      name: rawData.name,
+      location: rawData.location,
+      length: rawData.length,
+      elevationGain: rawData.elevationGain,
+      time: rawData.time,
+      rating: rawData.rating,
+      reviewCount: rawData.reviewCount,
+      coverPhotoPath: rawData.coverPhotoPath,
+      difficulty: rawData.difficulty as DifficultyLevel,
     });
     return trailObjektum;
   });
