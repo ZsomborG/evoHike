@@ -33,7 +33,6 @@ import {
   endIcon,
   waypointIcon,
 } from '../utils/mapIcons';
-import RouteRadiusVisualizer from '../components/RouteRadiusVisualizer';
 import MapContextMenu from '../components/MapContextMenu';
 import SelectedTrailDetails from '../components/SelectedTrailDetails';
 import MapLegend from '../components/MapLegend';
@@ -89,8 +88,6 @@ function RoutePage() {
   const [map, setMap] = useState<Map | null>(null);
   // itt tároljuk a lekért nevezetességeket
   const [pois, setPois] = useState<OverpassElement[]>([]);
-  // itt tároljuk a keresési sávot a vizualizációhoz
-  const [searchPath, setSearchPath] = useState<[number, number][] | null>(null);
 
   // navigációs állapotok
   const [navStart, setNavStart] = useState<[number, number] | null>(null);
@@ -151,14 +148,6 @@ function RoutePage() {
       // geojson konverzió leaflethez
       // fontos mert a geojson fordítva tárolja a koordinátákat
       const apiCoordinates = coordinates.map(([lon, lat]) => ({ lat, lon }));
-
-      // a vizualizációhoz is lat lon kell
-      const leafletCoordinates = coordinates.map(
-        ([lon, lat]) => [lat, lon] as [number, number],
-      );
-
-      // beállítjuk a keresési útvonalat
-      setSearchPath(leafletCoordinates);
 
       // lekérjük az adatokat az apitól
       // 200 méteres sugárban keresünk
@@ -222,7 +211,6 @@ function RoutePage() {
       setContextMenu(null);
       setSelectedTrail(null);
       setPois([]);
-      setSearchPath(null);
     }
   }, [contextMenu]);
 
@@ -232,7 +220,6 @@ function RoutePage() {
       setContextMenu(null);
       setSelectedTrail(null);
       setPois([]);
-      setSearchPath(null);
     }
   }, [contextMenu]);
 
@@ -245,7 +232,6 @@ function RoutePage() {
       setContextMenu(null);
       setSelectedTrail(null);
       setPois([]);
-      setSearchPath(null);
     }
   }, [contextMenu]);
 
@@ -436,11 +422,6 @@ function RoutePage() {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {/* keresési sáv megjelenítése */}
-            {searchPath && (
-              <RouteRadiusVisualizer path={searchPath} radius={200} />
-            )}
-
             {/* útvonaltervező megjelenítése */}
             {navStart && navEnd && (
               <RoutingMachine
@@ -544,19 +525,16 @@ function RoutePage() {
               setSelectionMode('start');
               setSelectedTrail(null);
               setPois([]);
-              setSearchPath(null);
             }}
             onSelectEndMode={() => {
               setSelectionMode('end');
               setSelectedTrail(null);
               setPois([]);
-              setSearchPath(null);
             }}
             onSelectWaypointMode={() => {
               setSelectionMode('waypoint');
               setSelectedTrail(null);
               setPois([]);
-              setSearchPath(null);
             }}
             onClear={handleClearNav}
             selectionMode={selectionMode}
