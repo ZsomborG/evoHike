@@ -18,8 +18,19 @@ public class OpenWeatherForecastController : ControllerBase
 
     [HttpGet(Name = "GetOpenWeatherForecast")]
 
-    public async Task<List<OpenWeatherForecast>> Get()
+    public async Task<ActionResult<List<OpenWeatherForecast>>> Get(string? city = null, float? lat = null, float? lon = null, int days = 1, int startHour = 0, int endHour = 24)
     {
-        return await _weatherService.GetWeatherForecastAsync("Eger",3);
+        
+        if (!string.IsNullOrEmpty(city))
+        {
+            return await _weatherService.GetWeatherForecastAsync(city, days, startHour, endHour);
+        }
+
+        if (lat.HasValue && lon.HasValue)
+        {
+            return await _weatherService.GetWeatherForecastAsync(lat.Value, lon.Value, days, startHour, endHour);
+        }
+        
+        return BadRequest("Adj meg egy várost vagy koordinátákat!");
     }
 }

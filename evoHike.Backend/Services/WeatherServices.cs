@@ -15,17 +15,23 @@ public class WeatherService
         _client = client;
     }
 
-    public async Task<List<OpenWeatherForecast>> GetWeatherForecastAsync(string cityName, int forecastDays)
+    public async Task<List<OpenWeatherForecast>> GetWeatherForecastAsync(string cityName, int forecastDays , int startHour , int endHour ) //város alapján 
     {
-        var geoOption = new GeocodingOptions(cityName) ; // itt hoz létre egy geoption nevu Geocoding Options peldanyt
+        var geoOption = new GeocodingOptions(cityName) ; // 
         var geoResult = await _client.GetLocationDataAsync(geoOption);
 
         var location = geoResult.Locations[0]; // azért nulla mert a legpontosabb egyezés kell
 
+        return await GetWeatherForecastAsync(location.Latitude, location.Longitude, forecastDays, startHour, endHour);
+    }
+
+    public async Task<List<OpenWeatherForecast>> GetWeatherForecastAsync(float lat, float longl, int forecastDays, // szél és hossz alapján
+        int startHour, int endHour)
+    {
         var weatherOption = new WeatherForecastOptions
         {
-            Latitude = location.Latitude,
-            Longitude = location.Longitude,
+            Latitude = lat,
+            Longitude = longl,
             
             Start_date = DateOnly.FromDateTime(DateTime.Now),
             End_date = DateOnly.FromDateTime(DateTime.Now.AddDays(forecastDays)),
@@ -43,26 +49,32 @@ public class WeatherService
         };
 
         var response = await _client.QueryWeatherApiAsync(weatherOption);
+
+        if (!OpenWeatherForecast.IsValidForecast(response)) 
+        {
+            return null; 
+        }
         
         var forecast = new List<OpenWeatherForecast>();
-        var now = DateTime.Now;
 
-        if (response?.Hourly?.Time == null) 
+        if (response?.Hourly?.Time == null ) 
         {
             return new List<OpenWeatherForecast>();
         }
+        
 
         for (int i = 0; i < response.Hourly.Time.Length; i++)
         {
          
-            DateTime apiTime = response.Hourly.Time[i].DateTime;
+            DateTime apiTime = response.Hourly.Time[i].DateTime; // 
 
             
-            if (apiTime >= now)
+            if (apiTime.Hour >= startHour && apiTime.Hour <= endHour)
             {
                 var item = OpenWeatherForecast.ToWeatherForecast(i, apiTime, response);
                 forecast.Add(item);
             }
+            
         }
         
         return forecast;
