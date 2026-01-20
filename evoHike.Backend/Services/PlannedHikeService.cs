@@ -22,7 +22,24 @@ namespace evoHike.Backend.Services
 
         public async Task<PlannedHikeEntity> CreatePlannedHikeAsync(PlannedHikeEntity plannedHike)
         {
+            var routeExists = await _context.Trails.AnyAsync(r => r.Id == plannedHike.RouteId);
+            if (!routeExists)
+            {
+                throw new ArgumentException("A megadott RouteId nem létezik.");
+            }
+
+            if (plannedHike.PlannedStartDateTime < DateTime.UtcNow.AddMinutes(-5))
+            {
+                throw new ArgumentException("A túra kezdete nem lehet a múltban.");
+            }
+
+            if (plannedHike.PlannedEndDateTime <= plannedHike.PlannedStartDateTime)
+            {
+                throw new ArgumentException("A túra vége később kell legyen, mint a kezdete.");
+            }
+
             plannedHike.Status = HikeStatus.Planned;
+            plannedHike.CreatedAt = DateTime.UtcNow;
 
             _context.PlannedHikes.Add(plannedHike);
             await _context.SaveChangesAsync();
