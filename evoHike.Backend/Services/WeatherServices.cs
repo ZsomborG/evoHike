@@ -49,19 +49,14 @@ public class WeatherService
         };
 
         var response = await _client.QueryWeatherApiAsync(weatherOption);
-
-        if (!OpenWeatherForecast.IsValidForecast(response)) 
-        {
-            return null; 
-        }
         
+        var validator = new OpenWeatherForecastResponse(response);
+
+        if (!validator.IsValidForecast())
+        {
+            return null;
+        }
         var forecast = new List<OpenWeatherForecast>();
-
-        if (response?.Hourly?.Time == null ) 
-        {
-            return new List<OpenWeatherForecast>();
-        }
-        
 
         for (int i = 0; i < response.Hourly.Time.Length; i++)
         {
@@ -71,8 +66,7 @@ public class WeatherService
             
             if (apiTime.Hour >= startHour && apiTime.Hour <= endHour)
             {
-                var item = OpenWeatherForecast.ToWeatherForecast(i, apiTime, response);
-                forecast.Add(item);
+                forecast.Add(validator.ToWeatherForecast(apiTime,i));
             }
             
         }
