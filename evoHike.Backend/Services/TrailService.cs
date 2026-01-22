@@ -6,7 +6,7 @@ namespace evoHike.Backend.Services
 {
     public class TrailService(EvoHikeContext _context) : ITrailService
     {
-        public async Task<IEnumerable<HikingTrail>> GetAllTrailsAsync()
+        public async Task<IReadOnlyList<HikingTrail>> GetAllTrailsAsync()
         {
             var trails = await _context.HikingTrails
                 .AsNoTracking()

@@ -1,5 +1,6 @@
 using evoHike.Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace evoHike.Backend.Controllers
 {
@@ -34,9 +35,8 @@ namespace evoHike.Backend.Controllers
         public async Task<IActionResult> ClearData(
             [FromServices] evoHike.Backend.Data.EvoHikeContext db)
         {
-            db.HikingTrails.RemoveRange(db.HikingTrails);
-            db.PointsOfInterest.RemoveRange(db.PointsOfInterest);
-            await db.SaveChangesAsync();
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.MigrateAsync();
             return Ok("Database cleared.");
         }
     }

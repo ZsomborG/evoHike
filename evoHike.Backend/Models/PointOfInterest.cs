@@ -6,8 +6,8 @@ namespace evoHike.Backend.Models;
 public class PointOfInterest
 {
     [Key]
-    public int POIID { get; set; }
-    public required string POIName { get; set; }
-    public required string POIType { get; set; }
+    public int PointOfInterestId { get; set; }
+    public required string PointOfInterestName { get; set; }
+    public required string PointOfInterestType { get; set; }
     public required Point Location { get; set; }
 }

@@ -14,23 +14,7 @@ namespace evoHike.Backend.Controllers
             try
             {
                 var trails = await _trailService.GetAllTrailsAsync();
-                
-                var trailDtos = trails.Select(t => new TrailDto
-                {
-                    Id = t.TrailID.ToString(),
-                    Name = t.TrailName,
-                    Location = !string.IsNullOrEmpty(t.StartLocation) 
-                        ? $"{t.StartLocation} - {t.EndLocation}" 
-                        : t.StartLocation,
-                    Length = t.Length,
-                    Difficulty = t.Difficulty,
-                    ElevationGain = t.Elevation,
-                    Rating = t.Rating,
-                    ReviewCount = t.ReviewCount,
-                    EstimatedDuration = t.EstimatedDuration,
-                    CoverPhotoPath = t.CoverPhotoPath ?? "",
-                    RouteLine = t.RouteLine
-                });
+                var trailDtos = trails.Select(t => new TrailDto(t));
 
                 return Ok(trailDtos);
             }
@@ -41,19 +25,15 @@ namespace evoHike.Backend.Controllers
         }
 
         [HttpGet("{id}/pois")]
-        public async Task<ActionResult<IEnumerable<PoiDto>>> GetNearbyPois(int id, [FromQuery] double distance = 1000)
+        public async Task<ActionResult<IEnumerable<PoiDto>>> GetNearbyPois(
+            int id,
+            [FromQuery] double distance = 1000)
         {
             try
             {
-                var pois = await _trailService.GetPoisNearTrailAsync(id, distance);
-                var dtos = pois.Select(p => new PoiDto
-                {
-                    Id = p.POIID,
-                    Name = p.POIName,
-                    Type = p.POIType,
-                    Location = p.Location
-                });
-                return Ok(dtos);
+                var nearbyPois = await _trailService.GetPoisNearTrailAsync(id, distance);
+                var poiDtos = nearbyPois.Select(p => new PoiDto(p));
+                return Ok(poiDtos);
             }
             catch (Exception ex)
             {

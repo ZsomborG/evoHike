@@ -21,9 +21,8 @@ public class HikingTrail
     public double Elevation { get; set; }
     public double Rating { get; set; }
     public int ReviewCount { get; set; }
-    public required string CoverPhotoPath { get; set; }
+    public string? CoverPhotoPath { get; set; }
     public int? EstimatedDuration { get; set; }
-    
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public Geometry? RouteLine { get; set; }
 }

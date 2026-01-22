@@ -32,7 +32,6 @@ namespace evoHike.Backend.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrailID"));
 
                     b.Property<string>("CoverPhotoPath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -127,25 +126,25 @@ namespace evoHike.Backend.Migrations
 
             modelBuilder.Entity("evoHike.Backend.Models.PointOfInterest", b =>
                 {
-                    b.Property<int>("POIID")
+                    b.Property<int>("PointOfInterestId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("POIID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PointOfInterestId"));
 
                     b.Property<Point>("Location")
                         .IsRequired()
                         .HasColumnType("geography");
 
-                    b.Property<string>("POIName")
+                    b.Property<string>("PointOfInterestName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("POIType")
+                    b.Property<string>("PointOfInterestType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("POIID");
+                    b.HasKey("PointOfInterestId");
 
                     b.ToTable("PointsOfInterest");
                 });
