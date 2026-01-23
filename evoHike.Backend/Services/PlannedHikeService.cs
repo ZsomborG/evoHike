@@ -15,7 +15,7 @@ namespace evoHike.Backend.Services
         public async Task<IEnumerable<PlannedHikeEntity>> GetAllPlannedHikesAsync()
         {
             return await _context.PlannedHikes
-                .Include(ph => ph.Route)
+                .Include(ph => ph.HikingTrail)
                 .OrderBy(ph => ph.PlannedStartDateTime)
                 .ToListAsync();
         }

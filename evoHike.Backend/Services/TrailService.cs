@@ -1,4 +1,4 @@
-﻿using evoHike.Backend.Data;
+using evoHike.Backend.Data;
 using evoHike.Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,25 +6,36 @@ namespace evoHike.Backend.Services
 {
     public class TrailService(EvoHikeContext _context) : ITrailService
     {
-        public async Task<IEnumerable<RouteEntity>> GetAllTrailsAsync()
+        public async Task<IReadOnlyList<HikingTrail>> GetAllTrailsAsync()
         {
-            var trails = await _context.Trails
+            var trails = await _context.HikingTrails
                 .AsNoTracking()
                 .ToListAsync();
 
-            if (trails == null || trails.Count == 0)
-            {
-                throw new Exception("Can't find route");
-            }
-
-            return trails;
+            return trails.Count == 0
+                ? []
+                : trails;
         }
 
-        public async Task<RouteEntity?> GetTrailByIdAsync(int id)
+        public async Task<HikingTrail?> GetTrailByIdAsync(int id)
         {
-            return await _context.Trails
+            return await _context.HikingTrails
                 .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.Id == id);
+                .FirstOrDefaultAsync(t => t.TrailID == id);
+        }
+
+        public async Task<IEnumerable<PointOfInterest>> GetPoisNearTrailAsync(int trailId, double distanceMeters)
+        {
+            var trail = await _context.HikingTrails.FindAsync(trailId);
+            if (trail == null || trail.RouteLine == null)
+            {
+                return [];
+            }
+
+            return await _context.PointsOfInterest
+                .Where(poi => poi.Location.IsWithinDistance(trail.RouteLine, distanceMeters))
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }
