@@ -1,17 +1,6 @@
 namespace evoHike.Backend.Models;
 using System.Text.Json.Serialization;
 
-public class OpenWeatherForecastDto
-{
-    public CurrentWeather? current { get; set; }
-
-    public HourlyWeather? hourly { get; set; }
-    public bool IsValid()
-    {
-        return hourly?.IsValidForecast() ?? false;
-    }
-}
-
 public class CurrentWeather
 {
     public string? DateTime { get; set; }

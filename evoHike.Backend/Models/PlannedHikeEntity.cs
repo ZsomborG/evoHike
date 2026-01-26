@@ -23,5 +23,7 @@ namespace evoHike.Backend.Models
         public DateTime? CompletedAt { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public string? ChecklistJson { get; set; }
     }
 }
