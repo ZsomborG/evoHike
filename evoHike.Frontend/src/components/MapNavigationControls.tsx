@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdLocationOn, MdFlag, MdDelete, MdAddLocation } from 'react-icons/md';
 import '../styles/RoutPageStyles.css';
+import { useTranslation } from 'react-i18next';
 
 // itt vannak a propsok amiket kapunk
 interface MapNavigationControlsProps {
@@ -27,6 +28,7 @@ export default function MapNavigationControls({
   onClear,
   selectionMode,
 }: MapNavigationControlsProps) {
+  const { t } = useTranslation();
   // ez egy segéd komponens a gombokhoz
   const Button = ({ onClick, isActive, icon, label, color }: ButtonProps) => (
     <button
@@ -50,7 +52,7 @@ export default function MapNavigationControls({
           isActive={selectionMode === 'start'}
           icon={<MdLocationOn />}
           color="#5cb85c"
-          label="Navigáció innen (Kezdőpont)"
+          label={t('routePage.navFrom')}
         />
         {/* cél gomb piros zászlóval */}
         <Button
@@ -58,7 +60,7 @@ export default function MapNavigationControls({
           isActive={selectionMode === 'end'}
           icon={<MdFlag />}
           color="#d9534f"
-          label="Navigáció ide (Végpont)"
+          label={t('routePage.navTo')}
         />
         {/* köztes pont narancs ikonnal */}
         <Button
@@ -66,7 +68,7 @@ export default function MapNavigationControls({
           isActive={selectionMode === 'waypoint'}
           icon={<MdAddLocation />}
           color="#FF9800"
-          label="Köztes pont hozzáadása"
+          label={t('routePage.addWaypoint')}
         />
         <div className="nav-divider" />
         {/* törlés gomb szürke kukával */}
@@ -75,7 +77,7 @@ export default function MapNavigationControls({
           isActive={false}
           icon={<MdDelete />}
           color="#777"
-          label="Navigáció törlése"
+          label={t('routePage.clearNav')}
         />
       </div>
     </div>

@@ -43,12 +43,15 @@ export default function RouteEditorPanel({
   onGpxLoaded,
   disableGpxUpload,
 }: RouteEditorPanelProps) {
+  const { t } = useTranslation();
+
   // idő formázása
   const formatTime = (seconds: number) => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
-    if (h > 0) return `${h} ó ${m} p`;
-    return `${m} p`;
+    if (h > 0)
+      return `${h} ${t('routeForm.hours')} ${m} ${t('routeForm.minutes')}`;
+    return `${m} ${t('routeForm.minutes')}`;
   };
 
   // távolság formázása
@@ -56,7 +59,6 @@ export default function RouteEditorPanel({
     return (meters / 1000).toFixed(2) + ' km';
   };
 
-  const { t } = useTranslation();
   const { gpxInputRef, handleGpxChange, triggerGpxInput, gpxFile, clearGpx } =
     useRouteForm();
 
@@ -90,7 +92,7 @@ export default function RouteEditorPanel({
       if (newFile) {
         // Csak 5MB alatti képek
         if (newFile.size > 5 * 1024 * 1024) {
-          alert('A kép túl nagy! Max 5MB megengedett.');
+          alert(t('routeForm.image_too_big'));
           return;
         }
         setImages((prev) => [...prev, newFile]);
@@ -149,12 +151,12 @@ export default function RouteEditorPanel({
       style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <h2 className="editor-header">
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <MdEdit style={{ marginRight: '10px' }} /> Útvonal tervező
+          <MdEdit style={{ marginRight: '10px' }} /> {t('routeForm.title')}
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: '10px' }}>
           <MdClose
             style={{ cursor: 'pointer' }}
-            title="Menü bezárása"
+            title={t('routeForm.close_menu')}
             onClick={closeRouteEditor}
           />
         </div>
@@ -163,7 +165,7 @@ export default function RouteEditorPanel({
       <div className="editor-form-row">
         <div className="editor-input-group">
           <label htmlFor="route-name" className="editor-label">
-            Útvonal neve:
+            {t('routeForm.route_name')}:
             {showErrors && !isNameValid && (
               <MdError
                 color="red"
@@ -176,7 +178,7 @@ export default function RouteEditorPanel({
             type="text"
             value={name}
             onChange={(e) => onNameChange(e.target.value)}
-            placeholder="Pl. A kincshez vezető túra"
+            placeholder={t('routeForm.name_placeholder')}
             className="editor-input"
             style={{
               borderColor: showErrors && !isNameValid ? 'red' : undefined,
@@ -188,7 +190,8 @@ export default function RouteEditorPanel({
 
         <div className="editor-input-group large">
           <label htmlFor="route-desc" className="editor-label">
-            <MdDescription style={{ verticalAlign: 'middle' }} /> Leírás:
+            <MdDescription style={{ verticalAlign: 'middle' }} />{' '}
+            {t('routeForm.description_label')}:
             {showErrors && !isDescValid && (
               <MdError
                 color="red"
@@ -200,7 +203,7 @@ export default function RouteEditorPanel({
             id="route-desc"
             value={description}
             onChange={(e) => onDescriptionChange(e.target.value)}
-            placeholder="Pl. EXTRÉÉÉÉM DE NAGYON vigyázzni kell mert sok a kalóz errefelé !!4"
+            placeholder={t('routeForm.description_placeholder')}
             className="editor-input"
             rows={5}
             style={{
@@ -221,12 +224,14 @@ export default function RouteEditorPanel({
         }}>
         <div className="editor-stat-item">
           <MdStraighten style={{ marginRight: '5px', color: '#1976D2' }} />{' '}
-          <strong className="route-data">Távolság:</strong>&nbsp;
+          <strong className="route-data">{t('routeForm.distance')}</strong>
+          &nbsp;
           {formatDistance(distance)}
         </div>
         <div className="editor-stat-item">
           <MdTimer style={{ marginRight: '5px', color: '#1976D2' }} />{' '}
-          <strong className="route-data">Idő:</strong>&nbsp;{formatTime(time)}
+          <strong className="route-data">{t('routeForm.time')}</strong>&nbsp;
+          {formatTime(time)}
         </div>
       </div>
       <div className="pics-container">
@@ -244,7 +249,10 @@ export default function RouteEditorPanel({
                   {image ? (
                     // Ha van kép ezen az indexen, megjelenítjük az előnézetet
                     <div className="image-preview">
-                      <img src={URL.createObjectURL(image)} alt="túra kép" />
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt={t('routeForm.image_alt')}
+                      />
                       <button
                         onClick={() => removeImage(index)}
                         className="delete-btn">
@@ -274,10 +282,15 @@ export default function RouteEditorPanel({
         </div>
         <div className="buttons">
           <button className="btn-prev" onClick={() => scrollCarousel(-120)}>
-            <BiLeftArrow size={18} />
+            <div>
+              <BiLeftArrow size={18} />
+            </div>
           </button>
           <button className="btn-next" onClick={() => scrollCarousel(120)}>
-            <BiRightArrow size={18} />
+            <div>
+              {' '}
+              <BiRightArrow size={18} />
+            </div>
           </button>
         </div>
       </div>
@@ -292,12 +305,12 @@ export default function RouteEditorPanel({
             transform: `scale(${buttonScale})`,
             transition: 'transform 0.3s ease',
           }}>
-          <MdAdd style={{ marginRight: '8px' }} /> Útvonal hozzáadása
+          <MdAdd style={{ marginRight: '8px' }} /> {t('routeForm.add_route')}
         </button>
       </div>
 
       <div className="separator" style={{ marginTop: 'auto' }}>
-        <span>VAGY</span>
+        <span>{t('routeForm.or')}</span>
       </div>
 
       <div
@@ -316,10 +329,7 @@ export default function RouteEditorPanel({
           className="route-upload-gpx-btn"
           onClick={
             disableGpxUpload
-              ? () =>
-                  alert(
-                    'Manuális útvonaltervezés aktív. Előbb töröld a navigációt!',
-                  )
+              ? () => alert(t('routeForm.manual_nav_active'))
               : triggerGpxInput
           }
           style={{

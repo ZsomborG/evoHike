@@ -74,6 +74,71 @@
       "new": "+ Add new"
     },
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "title": "Route Planner",
+    "close_menu": "Close menu",
+    "name_placeholder": "E.g. Hike to the treasure",
+    "description_label": "Description",
+    "description_placeholder": "E.g. EXTREME AND VERY dangerous because there are many pirates here !!4",
+    "distance": "Distance",
+    "time": "Time",
+    "image_alt": "trail image",
+    "add_route": "Add Route",
+    "or": "OR",
+    "manual_nav_active": "Manual navigation active. Clear navigation first!",
+    "image_too_big": "Image too large! Max 5MB allowed.",
+    "hours": "h",
+    "minutes": "m"
+  },
+  "routePage": {
+    "gpxLoadedError": "GPX file loaded. Clear navigation for manual planning!",
+    "routeSaved": "Route saved",
+    "intermediatePoint": "Intermediate point",
+    "startPoint": "Start point",
+    "endPoint": "End point",
+    "delete": "Delete",
+    "navFrom": "Navigate from here",
+    "navTo": "Navigate to here",
+    "addWaypoint": "Add waypoint",
+    "clearNav": "Clear navigation"
+  },
+  "mapLegend": {
+    "title": "Legend",
+    "natural": "Natural",
+    "peak": "Peak",
+    "spring": "Spring",
+    "cave": "Cave",
+    "waterfall": "Waterfall",
+    "tourism": "Tourism",
+    "viewpoint": "Viewpoint",
+    "attraction": "Attraction",
+    "museum": "Museum",
+    "historic": "Historic",
+    "castle": "Castle",
+    "ruins": "Ruins",
+    "monument": "Monument",
+    "service": "Service",
+    "drinking_water": "Drinking water",
+    "church": "Church",
+    "restaurant": "Restaurant"
+  },
+  "selectedTrail": {
+    "selected": "Selected",
+    "location": "Location",
+    "distance": "Dist",
+    "elevation": "Elev",
+    "time": "Time",
+    "hour": "h",
+    "minute": "min",
+    "user_photos": "User photos",
+    "photo_alt": "Trail photo",
+    "nearby_pois": "Nearby POIs along the route",
+    "jump_to_map": "Jump to map",
+    "items": "items"
+  },
+  "trailList": {
+    "search_title": "Route Search",
+    "filter": "Filter",
+    "difficulty_level": "Difficulty level"
   }
 }

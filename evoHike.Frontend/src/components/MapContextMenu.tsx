@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdLocationOn, MdFlag, MdDelete, MdAddLocation } from 'react-icons/md';
 import '../styles/RoutPageStyles.css';
+import { useTranslation } from 'react-i18next';
 
 // itt vannak a propsok amiket kapunk
 interface MapContextMenuProps {
@@ -21,6 +22,7 @@ export default function MapContextMenu({
   onAddWaypoint,
   onClearNav,
 }: MapContextMenuProps) {
+  const { t } = useTranslation();
   const handleKeyDown = (e: React.KeyboardEvent, action: () => void) => {
     if (e.key === 'Enter' || e.key === ' ') {
       action();
@@ -40,7 +42,7 @@ export default function MapContextMenu({
         role="menuitem"
         tabIndex={0}>
         <MdLocationOn style={{ marginRight: '8px', color: '#5cb85c' }} />{' '}
-        Navigáció innen
+        {t('routePage.navFrom')}
       </div>
       {/* cél gomb piros zászlóval */}
       <div
@@ -49,8 +51,8 @@ export default function MapContextMenu({
         onKeyDown={(e) => handleKeyDown(e, onNavTo)}
         role="menuitem"
         tabIndex={0}>
-        <MdFlag style={{ marginRight: '8px', color: '#d9534f' }} /> Navigáció
-        ide
+        <MdFlag style={{ marginRight: '8px', color: '#d9534f' }} />{' '}
+        {t('routePage.navTo')}
       </div>
       {/* köztes pont narancs ikonnal */}
       <div
@@ -60,7 +62,7 @@ export default function MapContextMenu({
         role="menuitem"
         tabIndex={0}>
         <MdAddLocation style={{ marginRight: '8px', color: '#FF9800' }} />{' '}
-        Útvonal pont hozzáadása
+        {t('routePage.addWaypoint')}
       </div>
       {/* törlés gomb szürke kukával */}
       <div
@@ -69,8 +71,8 @@ export default function MapContextMenu({
         onKeyDown={(e) => handleKeyDown(e, onClearNav)}
         role="menuitem"
         tabIndex={0}>
-        <MdDelete style={{ marginRight: '8px', color: '#777' }} /> Navigáció
-        törlése
+        <MdDelete style={{ marginRight: '8px', color: '#777' }} />{' '}
+        {t('routePage.clearNav')}
       </div>
     </div>
   );

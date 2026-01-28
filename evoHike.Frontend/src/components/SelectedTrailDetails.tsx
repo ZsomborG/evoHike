@@ -3,6 +3,7 @@ import type { OverpassElement } from '../api/overpassApi';
 import { Map } from 'leaflet';
 import { MdLocationOn, MdPhotoCamera, MdMap } from 'react-icons/md';
 import '../styles/RoutPageStyles.css';
+import { useTranslation } from 'react-i18next';
 
 // itt vannak a propsok amiket kapunk
 interface SelectedTrailDetailsProps {
@@ -17,6 +18,7 @@ export default function SelectedTrailDetails({
   pois,
   map,
 }: SelectedTrailDetailsProps) {
+  const { t } = useTranslation();
   return (
     <div className="selected-trail-details">
       <h2 className="trail-header">
@@ -28,13 +30,15 @@ export default function SelectedTrailDetails({
             filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.3))',
           }}
         />{' '}
-        Kiválasztva: {trail.name}
+        {t('selectedTrail.selected')}: {trail.name}
       </h2>
       <p>
-        <strong>Helyszín:</strong> {trail.location} | <strong>Táv:</strong>{' '}
-        {trail.length / 1000} km | <strong>Szint:</strong> {trail.elevationGain}
-        m | <strong>Idő:</strong> {Math.floor(trail.time / 60)} óra{' '}
-        {trail.time % 60} perc
+        <strong>{t('selectedTrail.location')}:</strong> {trail.location} |{' '}
+        <strong>{t('selectedTrail.distance')}:</strong> {trail.length / 1000} km
+        | <strong>{t('selectedTrail.elevation')}:</strong> {trail.elevationGain}
+        m | <strong>{t('selectedTrail.time')}:</strong>{' '}
+        {Math.floor(trail.time / 60)} {t('selectedTrail.hour')}{' '}
+        {trail.time % 60} {t('selectedTrail.minute')}
       </p>
       <hr className="trail-divider" />
       <p className="trail-description">{trail.description}</p>
@@ -51,14 +55,14 @@ export default function SelectedTrailDetails({
                 filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.3))',
               }}
             />{' '}
-            Felhasználói fotók:
+            {t('selectedTrail.user_photos')}:
           </h3>
           <div className="trail-photos-container">
             {trail.userPhotos.map((photoUrl, index) => (
               <img
                 key={index}
                 src={photoUrl}
-                alt={`Túra fotó ${index + 1}`}
+                alt={`${t('selectedTrail.photo_alt')} ${index + 1}`}
                 className="trail-photo"
               />
             ))}
@@ -79,7 +83,8 @@ export default function SelectedTrailDetails({
                 filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.3))',
               }}
             />{' '}
-            Közeli látnivalók az útvonal mentén ({pois.length} db):
+            {t('selectedTrail.nearby_pois')} ({pois.length}{' '}
+            {t('selectedTrail.items')}):
           </h3>
           <ul className="trail-pois-list">
             {pois.map((poi) => (
@@ -89,7 +94,7 @@ export default function SelectedTrailDetails({
                   type="button"
                   onClick={() => map?.flyTo([poi.lat, poi.lon], 18)}
                   className="trail-poi-btn"
-                  title="Ugrás a térképen">
+                  title={t('selectedTrail.jump_to_map')}>
                   <span className="trail-poi-name">{poi.tags?.name}</span>{' '}
                   <small className="trail-poi-type">
                     (

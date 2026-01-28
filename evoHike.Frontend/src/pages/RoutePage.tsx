@@ -204,9 +204,7 @@ function RoutePage() {
 
   const handleNavFrom = useCallback(() => {
     if (uploadedGpxGeoJson) {
-      alert(
-        'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
-      );
+      alert(t('routePage.gpxLoadedError'));
       return;
     }
     if (contextMenu) {
@@ -219,9 +217,7 @@ function RoutePage() {
 
   const handleNavTo = useCallback(() => {
     if (uploadedGpxGeoJson) {
-      alert(
-        'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
-      );
+      alert(t('routePage.gpxLoadedError'));
       return;
     }
     if (contextMenu) {
@@ -234,9 +230,7 @@ function RoutePage() {
 
   const handleAddWaypoint = useCallback(() => {
     if (uploadedGpxGeoJson) {
-      alert(
-        'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
-      );
+      alert(t('routePage.gpxLoadedError'));
       return;
     }
     if (contextMenu) {
@@ -293,9 +287,7 @@ function RoutePage() {
       }
 
       if (uploadedGpxGeoJson) {
-        alert(
-          'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
-        );
+        alert(t('routePage.gpxLoadedError'));
         return;
       }
 
@@ -450,7 +442,9 @@ function RoutePage() {
           time={customRouteStats.time}
           onNameChange={setCustomRouteName}
           onDescriptionChange={setCustomRouteDesc}
-          onSave={() => alert(`Útvonal mentve: ${customRouteName}`)}
+          onSave={() =>
+            alert(`${t('routePage.routeSaved')}: ${customRouteName}`)
+          }
           closeRouteEditor={() => {
             setCreateStartButton(false);
           }}
@@ -516,12 +510,15 @@ function RoutePage() {
                 icon={waypointIcon}>
                 <Popup>
                   <div className="popup-content-wrapper">
-                    <strong>Köztes pont {idx + 1}</strong>
+                    <strong>
+                      {t('routePage.intermediatePoint')} {idx + 1}
+                    </strong>
                     <br />
                     <button
                       onClick={() => handleRemoveWaypoint(idx)}
                       className="popup-delete-btn">
-                      <MdDelete style={{ marginRight: '4px' }} /> Törlés
+                      <MdDelete style={{ marginRight: '4px' }} />{' '}
+                      {t('routePage.delete')}
                     </button>
                   </div>
                 </Popup>
@@ -533,12 +530,13 @@ function RoutePage() {
               <Marker position={navStart} icon={startIcon}>
                 <Popup>
                   <div className="popup-content-wrapper">
-                    <strong>Start pont</strong>
+                    <strong>{t('routePage.startPoint')}</strong>
                     <br />
                     <button
                       onClick={handleRemoveStart}
                       className="popup-delete-btn">
-                      <MdDelete style={{ marginRight: '4px' }} /> Törlés
+                      <MdDelete style={{ marginRight: '4px' }} />{' '}
+                      {t('routePage.delete')}
                     </button>
                   </div>
                 </Popup>
@@ -550,12 +548,13 @@ function RoutePage() {
               <Marker position={navEnd} icon={endIcon}>
                 <Popup>
                   <div className="popup-content-wrapper">
-                    <strong>Cél pont</strong>
+                    <strong>{t('routePage.endPoint')}</strong>
                     <br />
                     <button
                       onClick={handleRemoveEnd}
                       className="popup-delete-btn">
-                      <MdDelete style={{ marginRight: '4px' }} /> Törlés
+                      <MdDelete style={{ marginRight: '4px' }} />{' '}
+                      {t('routePage.delete')}
                     </button>
                   </div>
                 </Popup>
@@ -610,9 +609,7 @@ function RoutePage() {
           <MapNavigationControls
             onSelectStartMode={() => {
               if (uploadedGpxGeoJson) {
-                alert(
-                  'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
-                );
+                alert(t('routePage.gpxLoadedError'));
                 return;
               }
               setSelectionMode('start');
@@ -621,9 +618,7 @@ function RoutePage() {
             }}
             onSelectEndMode={() => {
               if (uploadedGpxGeoJson) {
-                alert(
-                  'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
-                );
+                alert(t('routePage.gpxLoadedError'));
                 return;
               }
               setSelectionMode('end');
@@ -632,9 +627,7 @@ function RoutePage() {
             }}
             onSelectWaypointMode={() => {
               if (uploadedGpxGeoJson) {
-                alert(
-                  'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
-                );
+                alert(t('routePage.gpxLoadedError'));
                 return;
               }
               setSelectionMode('waypoint');

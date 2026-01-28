@@ -74,6 +74,71 @@
       "new": "+ Új hozzáadása"
     },
     "save": "Mentés",
-    "cancel": "Vissza"
+    "cancel": "Vissza",
+    "title": "Útvonal tervező",
+    "close_menu": "Menü bezárása",
+    "name_placeholder": "Pl. A kincshez vezető túra",
+    "description_label": "Leírás",
+    "description_placeholder": "Pl. EXTRÉÉÉÉM DE NAGYON vigyázzni kell mert sok a kalóz errefelé !!4",
+    "distance": "Távolság",
+    "time": "Idő",
+    "image_alt": "túra kép",
+    "add_route": "Útvonal hozzáadása",
+    "or": "VAGY",
+    "manual_nav_active": "Manuális útvonaltervezés aktív. Előbb töröld a navigációt!",
+    "image_too_big": "A kép túl nagy! Max 5MB megengedett.",
+    "hours": "ó",
+    "minutes": "p"
+  },
+  "routePage": {
+    "gpxLoadedError": "GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!",
+    "routeSaved": "Útvonal mentve",
+    "intermediatePoint": "Köztes pont",
+    "startPoint": "Start pont",
+    "endPoint": "Cél pont",
+    "delete": "Törlés",
+    "navFrom": "Navigáció innen",
+    "navTo": "Navigáció ide",
+    "addWaypoint": "Útvonal pont hozzáadása",
+    "clearNav": "Navigáció törlése"
+  },
+  "mapLegend": {
+    "title": "Jelmagyarázat",
+    "natural": "Természeti",
+    "peak": "Csúcs",
+    "spring": "Forrás",
+    "cave": "Barlang",
+    "waterfall": "Vízesés",
+    "tourism": "Turizmus",
+    "viewpoint": "Kilátó",
+    "attraction": "Nevezetesség",
+    "museum": "Múzeum",
+    "historic": "Történelmi",
+    "castle": "Vár",
+    "ruins": "Rom",
+    "monument": "Emlékmű",
+    "service": "Szolgáltatás",
+    "drinking_water": "Ivóvíz",
+    "church": "Templom",
+    "restaurant": "Étterem"
+  },
+  "selectedTrail": {
+    "selected": "Kiválasztva",
+    "location": "Helyszín",
+    "distance": "Táv",
+    "elevation": "Szint",
+    "time": "Idő",
+    "hour": "óra",
+    "minute": "perc",
+    "user_photos": "Felhasználói fotók",
+    "photo_alt": "Túra fotó",
+    "nearby_pois": "Közeli látnivalók az útvonal mentén",
+    "jump_to_map": "Ugrás a térképen",
+    "items": "db"
+  },
+  "trailList": {
+    "search_title": "Útvonal Kereső",
+    "filter": "Szűrés",
+    "difficulty_level": "Nehézségi szint"
   }
 }
