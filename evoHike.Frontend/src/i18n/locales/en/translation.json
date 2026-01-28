@@ -61,5 +61,25 @@
       "2": "Hard",
       "3": "Extreme"
     }
+  },
+  "plan": {
+    "title": "Plan Hike",
+    "start_date": "Start Date",
+    "end_date": "End Date",
+    "checklist_title": "Checklist",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "success": "Saved successfully!",
+    "error_save": "Error while saving.",
+    "error_date": "Invalid date range."
+  },
+  "checklist": {
+    "water": "Sufficient water (1.5L+)",
+    "raincoat": "Raincoat / Spare clothes",
+    "phone": "Charged phone + Powerbank",
+    "map": "Map (Offline) / GPS",
+    "first_aid": "First Aid Kit",
+    "food": "Food / Energy bar"
   }
 }

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import '../styles/RoutPageStyles.css';
 import routeData from '../data/routes.json' assert { type: 'json' };
 import type { FeatureCollection } from 'geojson';
@@ -17,6 +18,7 @@ import TrailCard from '../components/TrailCard';
 import { Trail } from '../models/Trail';
 import trailData from '../data/mockTrails.json';
 import type { DifficultyLevel } from '../types/difficulty';
+import PlanHikeModal from '../components/PlanHikeModel';
 
 interface Cluster {
   getChildCount: () => number;
@@ -32,7 +34,7 @@ const createClusterCustomIcon = (cluster: Cluster) => {
   });
 };
 {
-  /* Beégetett koordináta adatok */
+  /* Be�getett koordin�ta adatok */
 }
 const routeCoordinates: [number, number][] = [
   [37.7749, -122.4194], // San Francisco
@@ -42,6 +44,10 @@ const routeCoordinates: [number, number][] = [
 
 function RoutePage() {
   const { t } = useTranslation();
+  const [planningTrail, setPlanningTrail] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
   const mockTrails = trailData.map(
     (t) =>
       new Trail({
@@ -60,9 +66,9 @@ function RoutePage() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <Polyline positions={routeCoordinates} />{' '}
-        {/* Beégetett koordináta adatok megjelenitése */}
+        {/* Be�getett koordin�ta adatok megjelenit�se */}
         <GeoJSON data={geojson} />{' '}
-        {/* Fájlból koordináta adatok beolvásasa és megjelenitése */}
+        {/* F�jlb�l koordin�ta adatok beolv�sasa �s megjelenit�se */}
         <MarkerClusterGroup
           chunkedLoading
           iconCreateFunction={createClusterCustomIcon}>
@@ -80,9 +86,21 @@ function RoutePage() {
       </MapContainer>
       <div className="trail-container">
         {mockTrails.map((trail) => (
-          <TrailCard key={trail.id} trail={trail} />
+          <TrailCard
+            key={trail.id}
+            trail={trail}
+            onPlan={(id) => setPlanningTrail({ id: id, name: trail.name })}
+          />
         ))}
       </div>
+
+      {planningTrail !== null && (
+        <PlanHikeModal
+          routeId={planningTrail.id}
+          trailName={planningTrail.name}
+          onClose={() => setPlanningTrail(null)}
+        />
+      )}
     </div>
   );
 }

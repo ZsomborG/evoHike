@@ -61,5 +61,25 @@
       "2": "Nehéz",
       "3": "Extrém"
     }
+  },
+  "plan": {
+    "title": "Túra Tervezése",
+    "start_date": "Kezdés",
+    "end_date": "Befejezés",
+    "checklist_title": "Mit viszel magaddal?",
+    "save": "Mentés",
+    "saving": "Mentés...",
+    "cancel": "Mégse",
+    "success": "Sikeres mentés!",
+    "error_save": "Hiba a mentésnél.",
+    "error_date": "A dátum nem megfelelő."
+  },
+  "checklist": {
+    "water": "Megfelelő mennyiségű víz (1.5L+)",
+    "raincoat": "Esőkabát / Váltóruha",
+    "phone": "Töltött telefon + Powerbank",
+    "map": "Térkép (Offline is) / GPS",
+    "first_aid": "Elsősegély csomag",
+    "food": "Élelem / Energiaszelet"
   }
 }

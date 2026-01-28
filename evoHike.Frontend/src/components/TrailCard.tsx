@@ -4,9 +4,10 @@ import { Trail } from '../models/Trail';
 
 interface TrailCardProps {
   trail: Trail;
+  onPlan: (id: number) => void;
 }
 
-function TrailCard({ trail }: TrailCardProps) {
+function TrailCard({ trail, onPlan }: TrailCardProps) {
   const { t } = useTranslation();
 
   return (
@@ -71,9 +72,21 @@ function TrailCard({ trail }: TrailCardProps) {
               <span className="trail-card-placeholder-image">🖼️</span>
             )}
           </div>
-          <button type="button" className="trail-card-action-btn">
-            {t('trail.button_text')}
-          </button>
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+              width: '100%',
+            }}>
+            <button
+              type="button"
+              className="trail-card-action-btn"
+              onClick={() => onPlan(Number(trail.id))}>
+              {t('trail.button_text')}
+            </button>
+          </div>
         </div>
       </div>
     </div>
