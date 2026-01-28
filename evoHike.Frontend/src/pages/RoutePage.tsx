@@ -40,11 +40,11 @@ import MapNavigationControls from '../components/MapNavigationControls';
 import RouteEditorPanel from '../components/RouteEditorPanel';
 import { MdDelete } from 'react-icons/md';
 import TrailListPanel from '../components/TrailListPanel';
+import { calculateGeoJsonLength } from '../utils/geoUtils';
 
 const geojson = routeData as FeatureCollection;
 
 // statikus adatok kiemelése hogy ne generálódjon újra
-// mivel az adatok nem változnak felesleges újra mapelni
 const mockTrails = trailData.map(
   (t) =>
     new Trail({
@@ -119,6 +119,10 @@ function RoutePage() {
   //Utvonal hozzadasa sidebar allapot valtozo
   const [createStartButton, setCreateStartButton] = useState(false);
 
+  // Feltöltött GPX útvonal tárolása
+  const [uploadedGpxGeoJson, setUploadedGpxGeoJson] =
+    useState<FeatureCollection | null>(null);
+
   // ref a navigációs állapot követésére
   const isNavigationActiveRef = useRef(false);
 
@@ -127,6 +131,12 @@ function RoutePage() {
 
   // ref az utolsó API kérés azonosításához
   const lastRequestIdRef = useRef<number>(0);
+
+  const isManualNavigationActive = !!(
+    navStart ||
+    navEnd ||
+    navIntermediates.length > 0
+  );
 
   useEffect(() => {
     isNavigationActiveRef.current = !!(
@@ -137,24 +147,16 @@ function RoutePage() {
     );
   }, [selectionMode, navStart, navEnd, navIntermediates]);
 
-  // ez fut le ha kiválasztunk egy útvonalat
   const handleRouteSelect = useCallback(
     async (coordinates: [number, number][]) => {
-      // generálunk egy új ID-t a mostani kérésnek
       const requestId = Date.now();
       lastRequestIdRef.current = requestId;
 
-      // geojson konverzió leaflethez
-      // fontos mert a geojson fordítva tárolja a koordinátákat
       const apiCoordinates = coordinates.map(([lon, lat]) => ({ lat, lon }));
 
-      // lekérjük az adatokat az apitól
-      // 200 méteres sugárban keresünk
       const results = await getNearbyPOIs(apiCoordinates, 200);
 
-      // csak akkor frissítjük a state-et ha ez még mindig a legutolsó kérés
       if (lastRequestIdRef.current === requestId) {
-        // csak a nevesített pontokat tartjuk meg
         const namedPois = results.filter((p) => p.tags && p.tags.name);
         setPois(namedPois);
       }
@@ -167,14 +169,11 @@ function RoutePage() {
     (feature: Feature, layer: Layer) => {
       layer.on({
         click: () => {
-          // ha navigálunk ne engedjük a túra kiválasztását
           if (isNavigationActiveRef.current) return;
 
           if (feature.geometry.type === 'LineString') {
-            // kiolvassuk az idt a geojsonból
             const trailId = feature.properties?.id;
 
-            // megkeressük a hozzá tartozó adatokat
             if (trailId) {
               const foundTrail = mockTrails.find((t) => t.id === trailId);
               if (foundTrail) {
@@ -194,7 +193,6 @@ function RoutePage() {
 
   // jobb klikk kezelése
   const handleContextMenu = useCallback((e: LeafletMouseEvent) => {
-    // megakadályozzuk az alapértelmezett menüt
     e.originalEvent.preventDefault();
     setContextMenu({
       x: e.originalEvent.clientX,
@@ -205,24 +203,42 @@ function RoutePage() {
   }, []);
 
   const handleNavFrom = useCallback(() => {
+    if (uploadedGpxGeoJson) {
+      alert(
+        'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
+      );
+      return;
+    }
     if (contextMenu) {
       setNavStart([contextMenu.lat, contextMenu.lng]);
       setContextMenu(null);
       setSelectedTrail(null);
       setPois([]);
     }
-  }, [contextMenu]);
+  }, [contextMenu, uploadedGpxGeoJson]);
 
   const handleNavTo = useCallback(() => {
+    if (uploadedGpxGeoJson) {
+      alert(
+        'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
+      );
+      return;
+    }
     if (contextMenu) {
       setNavEnd([contextMenu.lat, contextMenu.lng]);
       setContextMenu(null);
       setSelectedTrail(null);
       setPois([]);
     }
-  }, [contextMenu]);
+  }, [contextMenu, uploadedGpxGeoJson]);
 
   const handleAddWaypoint = useCallback(() => {
+    if (uploadedGpxGeoJson) {
+      alert(
+        'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
+      );
+      return;
+    }
     if (contextMenu) {
       setNavIntermediates((prev) => [
         ...prev,
@@ -232,16 +248,19 @@ function RoutePage() {
       setSelectedTrail(null);
       setPois([]);
     }
-  }, [contextMenu]);
+  }, [contextMenu, uploadedGpxGeoJson]);
 
   const handleClearNav = useCallback(() => {
     setNavStart(null);
     setNavEnd(null);
     setNavIntermediates([]);
-    setCustomRouteStats({ distance: 0, time: 0 }); // statisztika nullázása
-    setCustomRouteName('');
+
+    if (!uploadedGpxGeoJson) {
+      setCustomRouteStats({ distance: 0, time: 0 });
+      setCustomRouteName('');
+    }
     setContextMenu(null);
-  }, []);
+  }, [uploadedGpxGeoJson]);
 
   // egyedi pontok törlése
   const handleRemoveStart = useCallback(() => {
@@ -256,7 +275,6 @@ function RoutePage() {
     setNavIntermediates((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
-  // ez fut le ha kész a számítás
   const handleRouteFound = useCallback(
     (summary: { totalDistance: number; totalTime: number }) => {
       setCustomRouteStats({
@@ -267,33 +285,37 @@ function RoutePage() {
     [],
   );
 
-  // térképre kattintás kezelése
   const handleMapClick = useCallback(
     (e: LeafletMouseEvent) => {
+      if (contextMenu) {
+        setContextMenu(null);
+        return;
+      }
+
+      if (uploadedGpxGeoJson) {
+        alert(
+          'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
+        );
+        return;
+      }
+
       if (selectionMode === 'start') {
-        // ha start módban vagyunk lerakjuk a kezdőpontot
         setNavStart([e.latlng.lat, e.latlng.lng]);
-        setSelectionMode(null); // kilépünk a módból
+        setSelectionMode(null);
       } else if (selectionMode === 'end') {
-        // ha cél módban vagyunk lerakjuk a végpontot
         setNavEnd([e.latlng.lat, e.latlng.lng]);
-        setSelectionMode(null); // kilépünk a módból
+        setSelectionMode(null);
       } else if (selectionMode === 'waypoint') {
-        // ha köztes pont módban vagyunk
         setNavIntermediates((prev) => [...prev, [e.latlng.lat, e.latlng.lng]]);
         setSelectionMode(null);
-      } else {
-        // alapértelmezett bezárjuk a menüt
-        setContextMenu(null);
       }
     },
-    [selectionMode],
+    [selectionMode, uploadedGpxGeoJson, contextMenu],
   );
 
   // kártya gombjának kezelése
   const handleTrailCardSelect = useCallback(
     (trailId: string) => {
-      // megkeressük a geometriát id alapján
       const feature = geojson.features.find(
         (f) => f.properties?.id === trailId && f.geometry.type === 'LineString',
       );
@@ -323,7 +345,7 @@ function RoutePage() {
           const yCoordinate =
             mapContainerRef.current.getBoundingClientRect().top +
             window.scrollY;
-          const yOffset = -100; // navbar magassága + kis ráhagyás
+          const yOffset = -100;
           window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
         }
       }
@@ -332,8 +354,6 @@ function RoutePage() {
   );
 
   // waypoints memorizálása
-  // fontos hogy ne renderelődjön újra feleslegesen
-  // különben végtelen ciklust okoz
   const waypoints = useMemo(() => {
     return navStart && navEnd ? [navStart, ...navIntermediates, navEnd] : [];
   }, [navStart, navEnd, navIntermediates]);
@@ -346,7 +366,6 @@ function RoutePage() {
       (f) => f.properties?.id === selectedTrail.id,
     );
 
-    // ha megtaláltuk a vonalat becsomagoljuk egy szabványos geojson objektumba
     if (feature) {
       const collection: FeatureCollection = {
         type: 'FeatureCollection',
@@ -356,6 +375,68 @@ function RoutePage() {
     }
     return null;
   }, [selectedTrail]);
+
+  // GPX betöltés kezelése és zoomolás
+  const handleGpxLoaded = useCallback(
+    async (data: FeatureCollection | null) => {
+      setUploadedGpxGeoJson(data);
+
+      if (!data) {
+        setPois([]);
+        setCustomRouteStats({ distance: 0, time: 0 });
+        return;
+      }
+
+      if (navStart || navEnd || navIntermediates.length > 0) {
+        return;
+      }
+
+      // Biztosítjuk, hogy a szerkesztő panel nyitva maradjon
+      setCreateStartButton(true);
+
+      // Ha van adat, zoomoljunk rá
+      if (data.features && data.features.length > 0 && map) {
+        const feature = data.features[0];
+        if (feature.geometry.type === 'LineString') {
+          const coordinates = feature.geometry.coordinates as [
+            number,
+            number,
+          ][];
+
+          const leafletCoords = coordinates.map(
+            ([lon, lat]) => [lat, lon] as [number, number],
+          );
+          map.fitBounds(latLngBounds(leafletCoords), { padding: [50, 50] });
+
+          const distanceMeters = calculateGeoJsonLength(coordinates);
+
+          const estimatedTimeSeconds = distanceMeters / (4000 / 3600);
+
+          setCustomRouteStats({
+            distance: distanceMeters,
+            time: estimatedTimeSeconds,
+          });
+
+          // POI-k lekérése a feltöltött útvonal mentén
+          const requestId = Date.now();
+          lastRequestIdRef.current = requestId;
+
+          const apiCoordinates = coordinates.map(([lon, lat]) => ({
+            lat,
+            lon,
+          }));
+
+          const results = await getNearbyPOIs(apiCoordinates, 200);
+
+          if (lastRequestIdRef.current === requestId) {
+            const namedPois = results.filter((p) => p.tags && p.tags.name);
+            setPois(namedPois);
+          }
+        }
+      }
+    },
+    [map, navStart, navEnd, navIntermediates],
+  );
 
   // segédfüggvény a sidebar tartalmának kiválasztására
   const renderSidebarContent = () => {
@@ -373,6 +454,8 @@ function RoutePage() {
           closeRouteEditor={() => {
             setCreateStartButton(false);
           }}
+          onGpxLoaded={handleGpxLoaded}
+          disableGpxUpload={isManualNavigationActive}
         />
       );
     }
@@ -482,7 +565,7 @@ function RoutePage() {
             {/* vizuális réteg */}
             {filteredGeoJson && (
               <GeoJSON
-                key={`visual-${selectedTrail?.id}`} // a key miatt újrarajzolja ha változik az id
+                key={`visual-${selectedTrail?.id}`}
                 data={filteredGeoJson}
                 style={visualLayerStyle}
               />
@@ -491,10 +574,19 @@ function RoutePage() {
             {/* interakciós réteg */}
             {filteredGeoJson && (
               <GeoJSON
-                key={`interaction-${selectedTrail?.id}`} // ide is kell a key
+                key={`interaction-${selectedTrail?.id}`}
                 data={filteredGeoJson}
                 onEachFeature={onEachFeature}
                 style={interactionLayerStyle}
+              />
+            )}
+
+            {/* Feltöltött GPX útvonal megjelenítése (kék szaggatott vonal) */}
+            {uploadedGpxGeoJson && (
+              <GeoJSON
+                key="uploaded-gpx"
+                data={uploadedGpxGeoJson}
+                style={{ ...visualLayerStyle, dashArray: '10, 10' }}
               />
             )}
 
@@ -517,16 +609,34 @@ function RoutePage() {
           {/* jobb oldali navigációs panel */}
           <MapNavigationControls
             onSelectStartMode={() => {
+              if (uploadedGpxGeoJson) {
+                alert(
+                  'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
+                );
+                return;
+              }
               setSelectionMode('start');
               setSelectedTrail(null);
               setPois([]);
             }}
             onSelectEndMode={() => {
+              if (uploadedGpxGeoJson) {
+                alert(
+                  'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
+                );
+                return;
+              }
               setSelectionMode('end');
               setSelectedTrail(null);
               setPois([]);
             }}
             onSelectWaypointMode={() => {
+              if (uploadedGpxGeoJson) {
+                alert(
+                  'GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!',
+                );
+                return;
+              }
               setSelectionMode('waypoint');
               setSelectedTrail(null);
               setPois([]);
