@@ -154,7 +154,7 @@ const PlanHikeModal = ({ routeId, onClose, trailName }: PlanHikeModalProps) => {
               padding: '20px',
               fontSize: '1.2rem',
             }}>
-            ? {t('plan.success')}
+            {t('plan.success')}
           </div>
         ) : (
           <form
