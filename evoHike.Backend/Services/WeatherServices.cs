@@ -1,42 +1,76 @@
+using System.Runtime.InteropServices.JavaScript;
+using OpenMeteo.Geocoding;
+using OpenMeteo.Weather.Forecast.Options;
+
 namespace evoHike.Backend.Services;
 using evoHike.Backend.Models;
-using System.Net.Http.Json;
+using OpenMeteo;
 
 public class WeatherService
 {
-    private readonly HttpClient _httpClient;
+    private readonly OpenMeteoClient _client;
 
-    public WeatherService(HttpClient httpClient)
+    public WeatherService(OpenMeteoClient client)
     {
-        _httpClient = httpClient;
+        _client = client;
     }
 
-    public async Task<List<OpenWeatherForecast>> GetWeatherForecastAsync()
+    public async Task<List<OpenWeatherForecast>> GetWeatherForecastAsync(string cityName, int forecastDays , int startHour , int endHour ) //város alapján 
     {
-    
-        string url = "https://api.open-meteo.com/v1/forecast?latitude=48.1031&longitude=20.7781&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,precipitation_probability,weather_code&forecast_days=1";
+        var geoOption = new GeocodingOptions(cityName) ; // 
+        var geoResult = await _client.GetLocationDataAsync(geoOption);
 
-        var response = await _httpClient.GetFromJsonAsync<OpenWeatherForecastDto>(url);
-        
-        var forecast = new List<OpenWeatherForecast>();
-        var now = DateTime.Now; 
+        var location = geoResult.Locations[0]; // azért nulla mert a legpontosabb egyezés kell
 
-        if (response == null || !response.IsValid())
+        return await GetWeatherForecastAsync(location.Latitude, location.Longitude, forecastDays, startHour, endHour);
+    }
+
+    public async Task<List<OpenWeatherForecast>> GetWeatherForecastAsync(float lat, float longl, int forecastDays, // szél és hossz alapján
+        int startHour, int endHour)
+    {
+        var weatherOption = new WeatherForecastOptions
         {
-            return new List<OpenWeatherForecast>();
-        }
-        {
-            var hourlyData = response.hourly!;
-
-            for (int i = 0; i < hourlyData.HourlyDateTime!.Length; i++)
+            Latitude = lat,
+            Longitude = longl,
+            
+            Start_date = DateOnly.FromDateTime(DateTime.Now),
+            End_date = DateOnly.FromDateTime(DateTime.Now.AddDays(forecastDays)),
+            
+            Hourly = new HourlyOptions
             {
-                DateTime apiTime = DateTime.Parse(hourlyData.HourlyDateTime[i]);
-                if (apiTime >= now)
-                {
-                    forecast.Add(hourlyData.ToWeatherForecast(i, apiTime));
-                }
+                HourlyOptionsParameter.temperature_2m,
+                HourlyOptionsParameter.relativehumidity_2m,
+                HourlyOptionsParameter.apparent_temperature,
+                HourlyOptionsParameter.windspeed_10m,
+                HourlyOptionsParameter.precipitation_probability,
+                HourlyOptionsParameter.weathercode
             }
+                
+        };
+
+        var response = await _client.QueryWeatherApiAsync(weatherOption);
+        
+        var validator = new OpenWeatherForecastResponse(response);
+
+        if (!validator.IsValidForecast())
+        {
+            return null;
         }
+        var forecast = new List<OpenWeatherForecast>();
+
+        for (int i = 0; i < response.Hourly.Time.Length; i++)
+        {
+         
+            DateTime apiTime = response.Hourly.Time[i].DateTime; 
+
+            
+            if (apiTime.Hour >= startHour && apiTime.Hour <= endHour)
+            {
+                forecast.Add(validator.ToWeatherForecast(apiTime,i));
+            }
+            
+        }
+        
         return forecast;
     }
 }
