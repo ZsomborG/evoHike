@@ -1,53 +1,58 @@
 ﻿namespace evoHike.Backend.Models;
 using OpenMeteoSDK  = OpenMeteo.Weather.Forecast.ResponseModel.WeatherForecast;
+using OpenMeteoSDKHourly = OpenMeteo.Weather.Forecast.ResponseModel.Hourly;
 
 public class OpenWeatherForecastResponse
 {
-    private OpenMeteoSDK _openMeteoSDK;
+    private readonly OpenMeteoSDKHourly _hourly;
+    private readonly int _count; 
 
-    public OpenWeatherForecastResponse(OpenMeteoSDK openMeteoSDK)
+    public OpenWeatherForecastResponse(OpenMeteoSDK forecast)
     {
-        _openMeteoSDK = openMeteoSDK;
+        _hourly = forecast.Hourly;
+        _count = _hourly.Time?.Length ?? 0;
     }
     public bool IsValidForecast()
     {
-        if (_openMeteoSDK.Hourly == null )
+        
+        if (_hourly == null || _count == 0 )
         {
             return false;
         }
 
-        if (_openMeteoSDK.Hourly.Temperature_2m == null ||_openMeteoSDK.Hourly.Apparent_temperature == null || _openMeteoSDK.Hourly.Windspeed_10m == null || _openMeteoSDK.Hourly.Relativehumidity_2m == null || _openMeteoSDK.Hourly.Precipitation_probability == null || _openMeteoSDK.Hourly.Weathercode == null)
-        {
-            return false;
-        }
+        return AreSameLength(
+            _count,
+            _hourly.Temperature_2m,
+            _hourly.Apparent_temperature,
+            _hourly.Windspeed_10m,
+            _hourly.Relativehumidity_2m,
+            _hourly.Precipitation_probability,
+            _hourly.Weathercode);
 
-        int count = _openMeteoSDK.Hourly.Time.Length;
-        if (count == 0)
-        {
-            return false;
-        }
-        bool lengthsAreOk = 
-            _openMeteoSDK.Hourly.Temperature_2m.Length == count &&
-            _openMeteoSDK.Hourly.Relativehumidity_2m.Length == count &&
-            _openMeteoSDK.Hourly.Apparent_temperature.Length == count &&
-            _openMeteoSDK.Hourly.Windspeed_10m.Length == count &&
-            _openMeteoSDK.Hourly.Precipitation_probability.Length == count &&
-            _openMeteoSDK.Hourly.Weathercode.Length == count;
-
-        return lengthsAreOk;
     }
 
     public OpenWeatherForecast ToWeatherForecast(DateTime apiTime, int index)
     {
+
+        if (index < 0 || index >= _count)
+            throw new ArgumentOutOfRangeException(nameof(index));
+        
+        var h = _hourly!;
+        
         return new OpenWeatherForecast
         {
             ForecastDatetime = apiTime,
-            TemperatureC = _openMeteoSDK.Hourly?.Temperature_2m![index],
-            FeelsLikeC = _openMeteoSDK.Hourly?.Apparent_temperature![index],
-            WindSpeed_ms = (int)_openMeteoSDK.Hourly?.Windspeed_10m![index],
-            HumidityPercent = _openMeteoSDK.Hourly?.Relativehumidity_2m![index],
-            Pop = _openMeteoSDK.Hourly?.Precipitation_probability![index],
-            WeatherCode = _openMeteoSDK.Hourly?.Weathercode![index]
+            TemperatureC = h.Temperature_2m![index],
+            FeelsLikeC = h.Apparent_temperature![index],
+            WindSpeed_ms = (int)h.Windspeed_10m![index],
+            HumidityPercent = h.Relativehumidity_2m![index],
+            Pop = h.Precipitation_probability![index],
+            WeatherCode = h.Weathercode![index]
         };
+    }
+    
+    private static bool AreSameLength(int expected, params Array?[] arrays)
+    {
+        return arrays.All(a => a != null && a.Length == expected);
     }
 }
