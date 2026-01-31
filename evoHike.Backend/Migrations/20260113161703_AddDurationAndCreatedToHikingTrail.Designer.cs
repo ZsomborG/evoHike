@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using evoHike.Backend.Data;
@@ -12,9 +13,11 @@ using evoHike.Backend.Data;
 namespace evoHike.Backend.Migrations
 {
     [DbContext(typeof(EvoHikeContext))]
-    partial class EvoHikeContextModelSnapshot : ModelSnapshot
+    [Migration("20260113161703_AddDurationAndCreatedToHikingTrail")]
+    partial class AddDurationAndCreatedToHikingTrail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +35,7 @@ namespace evoHike.Backend.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrailID"));
 
                     b.Property<string>("CoverPhotoPath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -126,25 +130,25 @@ namespace evoHike.Backend.Migrations
 
             modelBuilder.Entity("evoHike.Backend.Models.PointOfInterest", b =>
                 {
-                    b.Property<int>("PointOfInterestId")
+                    b.Property<int>("POIID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PointOfInterestId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("POIID"));
 
                     b.Property<Point>("Location")
                         .IsRequired()
                         .HasColumnType("geography");
 
-                    b.Property<string>("PointOfInterestName")
+                    b.Property<string>("POIName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PointOfInterestType")
+                    b.Property<string>("POIType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PointOfInterestId");
+                    b.HasKey("POIID");
 
                     b.ToTable("PointsOfInterest");
                 });

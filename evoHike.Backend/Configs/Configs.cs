@@ -55,7 +55,8 @@ public static class Configs
         else
         {
             services.AddDbContext<EvoHikeContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                    x => x.UseNetTopologySuite()));
         }
     }
     public static void RegisterMiddlewares(this WebApplication app)
