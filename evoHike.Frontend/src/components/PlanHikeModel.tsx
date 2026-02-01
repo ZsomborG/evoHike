@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { hikeService } from '../models/hikeService';
 import Button from './Button';
+import { AxiosError } from 'axios';
 
 interface PlanHikeModalProps {
   routeId: number;
@@ -79,7 +80,17 @@ const PlanHikeModal = ({ routeId, onClose, trailName }: PlanHikeModalProps) => {
     setLoading(true);
     setError(null);
 
-    if (new Date(dates.start) >= new Date(dates.end)) {
+    const startDate = new Date(dates.start);
+    const endDate = new Date(dates.end);
+    const now = new Date();
+
+    if (startDate < now) {
+      setError(t('plan.error_past_date'));
+      setLoading(false);
+      return;
+    }
+
+    if (startDate >= endDate) {
       setError(t('plan.error_date'));
       setLoading(false);
       return;
@@ -88,8 +99,8 @@ const PlanHikeModal = ({ routeId, onClose, trailName }: PlanHikeModalProps) => {
     try {
       await hikeService.savePlannedHike({
         routeId,
-        start: new Date(dates.start).toISOString(),
-        end: new Date(dates.end).toISOString(),
+        start: startDate.toISOString(),
+        end: endDate.toISOString(),
         checklistItems: selectedItems,
       });
 
@@ -97,7 +108,12 @@ const PlanHikeModal = ({ routeId, onClose, trailName }: PlanHikeModalProps) => {
       setTimeout(onClose, 2000);
     } catch (err: unknown) {
       console.error(err);
-      setError(t('plan.error_save'));
+      const axiosError = err as AxiosError;
+      if (axiosError.response && typeof axiosError.response.data === 'string') {
+        setError(axiosError.response.data);
+      } else {
+        setError(t('plan.error_save'));
+      }
     } finally {
       setLoading(false);
     }

@@ -72,7 +72,8 @@
     "cancel": "Mégse",
     "success": "Sikeres mentés!",
     "error_save": "Hiba a mentésnél.",
-    "error_date": "A dátum nem megfelelő."
+    "error_date": "A dátum nem megfelelő.",
+    "error_past_date": "A kezdő dátum nem lehet múltbeli."
   },
   "checklist": {
     "water": "Megfelelő mennyiségű víz (1.5L+)",

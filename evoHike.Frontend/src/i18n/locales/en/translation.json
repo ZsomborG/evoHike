@@ -72,7 +72,8 @@
     "cancel": "Cancel",
     "success": "Saved successfully!",
     "error_save": "Error while saving.",
-    "error_date": "Invalid date range."
+    "error_date": "Invalid date range.",
+    "error_past_date": "Start date cannot be in the past."
   },
   "checklist": {
     "water": "Sufficient water (1.5L+)",
