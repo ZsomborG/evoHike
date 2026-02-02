@@ -17,7 +17,7 @@ namespace evoHike.Backend.Services
         public async Task<IEnumerable<PlannedHikeEntity>> GetAllPlannedHikesAsync(HikeStatus? filterStatus = null)
         {
             var query = _context.PlannedHikes
-                .Include(ph => ph.Route)
+                .Include(ph => ph.HikingTrail)
                 .AsQueryable();
 
             if (filterStatus.HasValue)

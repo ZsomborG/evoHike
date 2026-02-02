@@ -1,7 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import '../styles/Navbar.css';
-import '../styles/Navbar.css';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 

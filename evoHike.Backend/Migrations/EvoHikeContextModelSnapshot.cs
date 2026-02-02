@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using evoHike.Backend.Data;
 
 #nullable disable
@@ -22,6 +23,74 @@ namespace evoHike.Backend.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("evoHike.Backend.Models.HikingTrail", b =>
+                {
+                    b.Property<int>("TrailID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrailID"));
+
+                    b.Property<string>("CoverPhotoPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Difficulty")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Elevation")
+                        .HasColumnType("float");
+
+                    b.Property<string>("EndLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EstimatedDuration")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Length")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Network")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
+
+                    b.Property<int>("ReviewCount")
+                        .HasColumnType("int");
+
+                    b.Property<Geometry>("RouteLine")
+                        .HasColumnType("geography");
+
+                    b.Property<string>("StartLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrailName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrailSymbol")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Wikidata")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Wikipedia")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TrailID");
+
+                    b.ToTable("HikingTrails");
+                });
+
             modelBuilder.Entity("evoHike.Backend.Models.PlannedHikeEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -39,78 +108,59 @@ namespace evoHike.Backend.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("HikingTrailId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("PlannedEndDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("PlannedStartDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("RouteId")
-                        .HasColumnType("int");
-
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RouteId");
+                    b.HasIndex("HikingTrailId");
 
                     b.ToTable("PlannedHikes");
                 });
 
-            modelBuilder.Entity("evoHike.Backend.Models.RouteEntity", b =>
+            modelBuilder.Entity("evoHike.Backend.Models.PointOfInterest", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("PointOfInterestId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PointOfInterestId"));
 
-                    b.Property<string>("CoverPhotoPath")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ElevationGain")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EstimatedDuration")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Length")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Name")
+                    b.Property<Point>("Location")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("geography");
 
-                    b.Property<string>("PointsOfInterests")
+                    b.Property<string>("PointOfInterestName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoutePlan")
+                    b.Property<string>("PointOfInterestType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShortDescription")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                    b.HasKey("PointOfInterestId");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Routes");
+                    b.ToTable("PointsOfInterest");
                 });
 
             modelBuilder.Entity("evoHike.Backend.Models.PlannedHikeEntity", b =>
                 {
-                    b.HasOne("evoHike.Backend.Models.RouteEntity", "Route")
+                    b.HasOne("evoHike.Backend.Models.HikingTrail", "HikingTrail")
                         .WithMany()
-                        .HasForeignKey("RouteId")
+                        .HasForeignKey("HikingTrailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Route");
+                    b.Navigation("HikingTrail");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,257 @@
+.route-form-container {
+  width: 100%;
+  padding: 0 20px 0 0;
+}
+
+.route-form-card {
+  background-color: #d1d1d1;
+  padding: 30px;
+  border-radius: 40px;
+  border: 3px solid var(--primary-bg-color);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.route-upload-btn {
+  background-color: #888888;
+  color: #1a1a1a;
+  font-size: small;
+}
+
+.route-form-ref {
+  display: none;
+}
+
+.route-form-photo-remove {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 15%;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  z-index: 5;
+}
+
+.route-form-top-row {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.route-form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.route-form-input,
+.route-form-select,
+.route-form-textarea {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  background: white;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-size: 14px;
+}
+
+.route-form-textarea {
+  height: 100px;
+  resize: none;
+}
+.route-form-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.route-form-photo-box {
+  position: relative;
+  background-color: #4a4a4a;
+  color: #ccc;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.3s;
+  min-height: 140px;
+}
+.route-form-photo-box:hover {
+  background-color: #555;
+}
+
+.route-form-photo-icon {
+  font-size: 40px;
+  color: #4caf50;
+  margin-bottom: 5px;
+}
+
+.route-form-dynamic-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.route-form-add-btn {
+  background: none;
+  border: 1px dashed #666;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #444;
+  margin-top: 5px;
+}
+
+.route-form-gpx-btn {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5b2c8c; /* Lila szöveg */
+  font-weight: 500;
+}
+
+.route-form-save-btn {
+  background-color: #1a3a14; /* Sötétzöld gomb */
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+.route-form-cancel-btn {
+  background-color: #ae0808; /* Sötétzöld gomb */
+  color: #333;
+  border: none;
+  padding: 15px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+.route-form-save-btn:hover {
+  background-color: #2a5a20;
+}
+.route-form-cancel-btn:hover {
+  background-color: #cc0000;
+}
+
+.route-form-stop-pair {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.route-form-pair-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 50-50% felosztás a nevezetességnek */
+  gap: 10px;
+  flex: 1;
+}
+
+.route-form-input-small {
+  width: 100%;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  background: white;
+  font-size: 13px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.route-form-remove-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.route-form-remove-btn:hover {
+  background: #cc0000;
+}
+
+.route-form-section-label {
+  display: block;
+  font-weight: bold;
+  margin: 15px 0 10px 0;
+  color: #2c3e50;
+}
+
+.route-form-input,
+.route-form-textarea,
+.route-form-input-small {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  background-color: #ffffff;
+  color: #1a1a1a; /* Fix sötét szín */
+  font-size: 14px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.route-form-input::placeholder,
+.route-form-textarea::placeholder,
+.route-form-input-small::placeholder {
+  color: #888888;
+}
+
+.route-form-select option {
+  color: #1a1a1a;
+  background-color: #ffffff;
+}
+.route-form-controll-buttons {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: 6fr 4fr;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
