@@ -34,7 +34,7 @@ namespace evoHike.Backend.Controllers
         {
             try
             {
-                if (plannedHike.HikingTrailId == 0)
+                if (request.RouteId == 0)
                 {
                     return BadRequest("HikingTrailId is required.");
                 }

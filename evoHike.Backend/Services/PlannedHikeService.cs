@@ -32,7 +32,7 @@ namespace evoHike.Backend.Services
 
         public async Task<PlannedHikeEntity> CreatePlannedHikeAsync(PlanHikeRequest request)
         {
-            var routeExists = await _context.Trails.AnyAsync(r => r.Id == request.RouteId);
+            var routeExists = await _context.HikingTrails.AnyAsync(r => r.TrailID == request.RouteId);
             if (!routeExists)
             {
                 throw new ArgumentException("A megadott RouteId nem létezik.");
@@ -51,7 +51,7 @@ namespace evoHike.Backend.Services
 
             var newPlan = new PlannedHikeEntity
             {
-                RouteId = request.RouteId,
+                HikingTrailId = request.RouteId,
                 PlannedStartDateTime = request.Start,
                 PlannedEndDateTime = request.End,
                 Status = HikeStatus.Planned,
