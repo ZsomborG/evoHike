@@ -19,3 +19,5 @@ NodeJS szükséges a projekt futtatásához: [NodeJS](https://nodejs.org/)
    ```
 
 Ez a parancs egyszerre elindítja a C# backend API-t és a Vite frontend fejlesztői szervert. A Vite automatikusan meg fog nyitni egy böngészőablakot a frontendhez.
+
+asd
